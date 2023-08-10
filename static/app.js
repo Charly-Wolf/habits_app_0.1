@@ -85,13 +85,18 @@ async function fetchHabits() {
         habitItem.setAttribute("data-habit-id", habit.habit_id);
 
         habitItem.innerHTML = `
-          <span>${habit.name}</span>
+          <span class="habit-name">${habit.name}</span>
         `;
 
-        habitItem.addEventListener("click", () => trackHabit(habit.habit_id));
-
-        habitList.appendChild(habitItem);
+        habitItem.addEventListener("click", () => {
+          if (!habitItem.classList.contains("done")) {
+            trackHabit(habit.habit_id);
+          }
       });
+
+      habitList.appendChild(habitItem);
+
+    });
     } else {
       // Handle fetch habits error
     }
@@ -200,7 +205,7 @@ async function trackHabit(habitId) {
       );
 
       if (habitBox) {
-        habitBox.classList.toggle("done"); // Toggle the "done" class
+        habitBox.classList.add("done"); // Add the "done" class
       }
     } else {
       // Handle track habit error
@@ -253,7 +258,7 @@ function renderAddHabitForm() {
   appContainer.innerHTML = `
         <h2>Add Habit</h2>
         <form id="add-habit-form">
-            <input type="text" id="habit-name" placeholder="Habit Name">
+            <input type="text" id="new-habit-name" placeholder="Habit Name">
             <button type="submit">Confirm new Habit</button>
         </form>
         <button id="back-to-habits">Back to Habits</button>
@@ -268,7 +273,7 @@ function renderAddHabitForm() {
 
 async function handleAddHabit(event) {
   event.preventDefault();
-  const habitName = document.getElementById("habit-name").value.trim(); // Trim to remove leading/trailing whitespace
+  const habitName = document.getElementById("new-habit-name").value.trim(); // Trim to remove leading/trailing whitespace
 
   if (habitName === "") {
     try {

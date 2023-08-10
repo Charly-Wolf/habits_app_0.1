@@ -37,6 +37,10 @@ main {
   align-items: center;
 }
 
+.habit-name {
+    user-select: none;
+  }
+
 /* Style for habit boxes */
 #habit-list {
   display: grid;

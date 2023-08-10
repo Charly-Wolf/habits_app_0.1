@@ -29,7 +29,7 @@ class HabitLog(db.Model):
     log_id = db.Column(db.Integer, primary_key=True)
     habit_id = db.Column(db.Integer, db.ForeignKey('habit.habit_id'), nullable=False)
     log_date = db.Column(db.Date, nullable=False)
-    status = db.Column(db.Boolean, default=False)
+    # status = db.Column(db.Boolean, default=False)
 
 @app.route('/habits', methods=['GET'])
 def get_habits():
@@ -163,27 +163,22 @@ def track_habit(habit_id):
 @app.route('/habit/mark_done/<int:habit_id>', methods=['POST'])
 def toggle_habit_done(habit_id):
     habit = Habit.query.get(habit_id)
-    
+
     if habit:
-        # Update habit status
-        previous_status = habit.status
-        habit.status = not habit.status
-        
-        if previous_status:  # If habit was marked as done
-            # Delete the corresponding log entry
-            log_entry = HabitLog.query.filter_by(habit_id=habit_id, log_date=datetime.utcnow()).first()
-            if log_entry:
-                db.session.delete(log_entry)
-        else:  # If habit was marked as not done
-            # Add a new log entry
-            log_entry = HabitLog(habit_id=habit_id, log_date=datetime.utcnow(), status=True)
-            db.session.add(log_entry)
-        
-        db.session.commit()
-        
-        return jsonify({'message': 'Habit status toggled successfully'}), 200
+        try:
+            new_log = HabitLog(habit_id=habit.habit_id, log_date=datetime.utcnow())
+            db.session.add(new_log)
+
+            habit.status = not habit.status
+            db.session.commit()
+
+            return jsonify({'message': 'Habit status toggled successfully'}), 200
+        except Exception as e:
+            return jsonify({'message': 'An error occurred while toggling habit status.'}), 500
     else:
         return jsonify({'message': 'Habit not found'}), 404
+
+
 
 
 
