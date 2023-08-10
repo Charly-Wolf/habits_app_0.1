@@ -17,12 +17,20 @@ body {
 }
 
 header {
-  text-align: center;
-  margin-bottom: 20px;
+    text-align: center;
+    margin-bottom: 20px;
+    position: fixed; /* Add fixed positioning */
+    top: 0; /* Stick the header to the top */
+    left: 0;
+    width: 100%; /* Make the header full-width */
+    background-color: #fff; /* Add a background color */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 5px 10px; /* Add some padding for spacing */
+    z-index: 1000; /* Ensure the header appears above other content */
 }
 
 main {
-  padding: 20px;
+  padding: 75px 0 20px; /* Add padding at the top to create space for the fixed header */
   border-top: 1px solid #eee;
   display: flex;
   flex-direction: column;
@@ -113,19 +121,25 @@ main {
   transition: background-color 0.3s, border-color 0.3s; /* Adjust the duration as needed */
 }
 
-/* Style for buttons */
+/* Modern button styles */
 button {
-  padding: 10px 20px;
-  background-color: #007bff;
-  color: #fff;
-  border: none;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-button:hover {
-  background-color: #0056b3;
-}
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+  }
+  
+  button:hover {
+    background-color: #0056b3;
+    transform: scale(1.05); /* Slightly scale up on hover */
+  }
+  
+  button:active {
+    transform: scale(0.95); /* Slightly scale down on active */
+  }
 
 /* Other styles */
 .error-message {
@@ -163,4 +177,73 @@ button:hover {
   } 
   
 
+
+/* Original styles for larger screens */
+
+/* For screens with a maximum width of 600px */
+@media (max-width: 600px) {
+    
+  
+    .container {
+      max-width: 100%;
+      margin: 0;
+      padding: 0;
+    }
+    
+/* Modern button styles for smaller screens */
+button {
+    padding: 12px 0; /* Adjust padding for vertical spacing */
+    /* font-size: 20px; Increase font size */
+    border-radius: 4px;
+    width: 8rem;
+    margin: 10px 10px; /* Add spacing above, between, and below buttons */
+    white-space: normal; /* Allow the button text to wrap */
+    overflow: hidden; /* Hide any overflow */
+    text-overflow: initial; /* Reset text-overflow to initial */
+  }
+
+  /* Adjust font size for button text on smaller screens */
+  .habit-title button {
+    font-size: 15px; /* Adjust font size for buttons in the title */
+  }
+
+  /* Hide the habit title span for smaller screens */
+  .habit-title span {
+    display: none;
+  }
+
+  /* Hide the habit title span for smaller screens */
+  .habit-title span {
+    display: none;
+  }
+
+  /* Hide the habit title span for smaller screens */
+  .habit-title span {
+    display: none;
+  }
+
+  /* Center the habit subtitle below the app title */
+  .habit-subtitle {
+    display: block;
+    text-align: center;
+    margin-top: 5px;
+  }
+
+  /* Adjust grid layout for habit boxes on smaller screens */
+  #habit-list {
+    grid-template-columns: 80%; /* Occupies 80% of the screen width */
+    gap: 10px; /* Reduce the gap between habit boxes */
+    justify-items: center;
+    margin-top: 20px;
+    margin-bottom: 40px; /* Add more space at the bottom */
+  }
+
+  .habit-box {
+    width: 100%; /* Use full width of the grid container */
+    margin: 0;
+    padding: 5px; /* Adjust padding for habit boxes */
+    font-size: 14px;
+  }
+  
+  }
   
