@@ -1,0 +1,166 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f8f8f8;
+}
+
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+main {
+  padding: 20px;
+  border-top: 1px solid #eee;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Style for habit boxes */
+#habit-list {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px; /* Espacio entre filas y columnas */
+  justify-items: center;
+  margin-top: 20px;
+}
+
+/* Style for habit boxes */
+.habit-box {
+    width: 100%;
+    height: 100px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.3s, border-color 0.3s;
+    margin: 0 25px;
+    padding: 2px;
+  }
+  
+  /* Hover effect for completed habit boxes */
+  .habit-box.done:hover {
+    background-color: #92c492; /* Change to your desired color */
+    border-color: #65a765; /* Change to your desired color */
+  }
+  
+  /* Hover effect for not completed habit boxes */
+  .habit-box:not(.done):hover {
+    background-color: #a8a2a2; /* Change to your desired color */
+    border-color: #999; /* Change to your desired color */
+  }
+  
+  
+
+.habit-box {
+  width: 100%;
+  height: 100px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  background-color: #fff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s, border-color 0.3s;
+  margin: 0 25px;
+  padding: 2px;
+}
+
+.habit-box span {
+    transform: scale(1); /* Default size */
+    transition: transform 0.3s;
+  }
+
+/* Increase text size on hover */
+.habit-box:hover span {
+    transform: scale(1.20); /* Adjust the scale factor as needed */
+    transition: transform 0.3s;
+  }
+
+/* Style for completed habit boxes */
+.habit-box.done {
+  background-color: #d1f9e3;
+  border-color: #82d082;
+  transition: background-color 0.3s, border-color 0.3s; /* Adjust the duration as needed */
+}
+
+/* Style for slashed text */
+.habit-box.done span {
+    text-decoration: line-through;
+  }
+
+/* Style for not completed habit boxes */
+.habit-box:not(.done) {
+  background-color: #fff;
+  border-color: #ccc;
+  transition: background-color 0.3s, border-color 0.3s; /* Adjust the duration as needed */
+}
+
+/* Style for buttons */
+button {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+/* Other styles */
+.error-message {
+  color: red;
+}
+
+/* Add this style to align the button to the right within the title */
+.habit-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Style for the app when in edit mode */
+.edit-mode #app {
+  background-color: #3d3939; /* Change the background color to indicate edit mode */
+}
+
+/* Style for the delete button */
+.delete-button {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    width: 20px;
+    height: 20px;
+    background-color: red;
+    border: none;
+    border-radius: 50%;
+    color: white;
+    font-size: 14px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+  } 
+  
+
+  
