@@ -3,10 +3,12 @@ const appContainer = document.getElementById("app");
 
 let editingMode = false; // Flag to track editing mode
 let deletingMode = false;
+const currentDate = new Date();
 
 function renderHabitListPage() {
   appContainer.innerHTML = `
   <h2 class="habit-title">
+    <span class="today-date"></span>
     <span>Your Habits</span>
     <button id="edit-habit">Edit</button>
     <button id="delete-habit">Delete Habit</button>
@@ -48,6 +50,15 @@ function renderHabitListPage() {
     exitDeleteMode(); // Exit delete mode
     renderAddHabitForm(); // Render the add habit form
   });
+
+  const todayDateSpan = document.querySelector(".today-date");
+  const formattedDate = currentDate.toLocaleDateString("en-US", {
+    weekday: "short",
+    year: "2-digit",
+    month: "2-digit",
+    day: "2-digit"
+  });
+  todayDateSpan.textContent = formattedDate;
 
   fetchHabits();
 }
@@ -120,7 +131,7 @@ function enableEditMode() {
   // Update the title text to indicate editing mode
   const habitTitle = document.querySelector(".habit-title span");
   habitTitle.textContent = "Your Habits - EDITING MODE";
-  document.querySelector(".container").style.backgroundColor = "#eee";
+  document.querySelector(".container").style.backgroundColor = "#d1d1d1";
 }
 
 function enableDeleteMode() {
@@ -177,9 +188,11 @@ async function trackHabit(habitId) {
   } else {
     console.log("CHANGE STATUS");
     // Original trackHabit logic for tracking status
+
     const response = await fetch(`/habit/mark_done/${habitId}`, {
       method: "POST",
     });
+   
 
     if (response.ok) {
       const habitBox = document.querySelector(

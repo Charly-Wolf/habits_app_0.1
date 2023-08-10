@@ -47,6 +47,23 @@ def get_habits():
 
     return jsonify(habit_list)
 
+@app.route('/log_entries', methods=['GET'])
+def get_log_entries():
+    log_entries = HabitLog.query.all() # Fetch all log entries from the database
+    log_entry_list = []
+
+    for log_entry in log_entries:
+        log_entry_data = {
+            "log_id": log_entry.log_id,
+            "habit_id": log_entry.habit_id,
+            "log_date": log_entry.log_date,
+            "status": log_entry.status
+        }
+    
+        log_entry_list.append(log_entry_data)
+    
+    return jsonify(log_entry_list)
+
 @app.route('/habit/<int:habit_id>', methods=['DELETE'])
 def delete_habit(habit_id):
     habit = Habit.query.get_or_404(habit_id)
@@ -58,6 +75,24 @@ def delete_habit(habit_id):
     except Exception as e:
         return jsonify({'message': 'An error occurred while deleting the habit.'}), 500
 
+
+@app.route('/add_log_entry', methods=['POST'])
+def add_log_entry():
+    try:
+        data = request.get_json()
+        habit_id = data.get('habit_id')
+
+        if not habit_id or not habit_id.strip(): # Check for empty or whitespace-only habit id
+            return jsonify({'message': 'Habit id cannot be empty!'}), 400
+
+        new_entry_log = HabitLog(h_id = habit_id, log_date = datetime.utcnow(), status = 1)
+        db.session.add(new_entry_log)
+        db.session.commit()
+
+        return jsonify({'message': 'Entry log added successfully'}), 201
+    except Exception as e:
+        return jsonify({'message': 'An error occured while adding the entry log.'}), 500
+            
 
 @app.route('/add_habit', methods=['POST'])
 def add_habit():
@@ -89,36 +124,68 @@ def get_habit(habit_id):
         return jsonify(habit_data)
     else:
         return jsonify({'message': 'Habit not found'}), 404
+    
+@app.route('/log_entry/<int:log_id>', methods=['GET'])
+def get_log_entry(log_id):
+    log_entry = HabitLog.query.get(log_id)
+    if log_entry:
+        log_entry_data = {
+            "log_id": log_entry.log_id,
+            "habit_id": log_entry.habit_id,
+            "log_date": log_entry.log_date,
+            "status": log_entry.status
+        }    
+        return jsonify(log_entry_data)
+    else:
+        return jsonify({'message': 'Log entry not found'}), 404
 
 
 @app.route('/track_habit/<int:habit_id>', methods=['PUT'])
 def track_habit(habit_id):
     habit = Habit.query.get_or_404(habit_id)
-    
-    # Check if the last habit log entry is from a previous day
-    last_log = habit.logs.order_by(HabitLog.log_date.desc()).first()
-    today = datetime.utcnow().date()
-    if not last_log or last_log.log_date < today:
-        # Reset habit status for the new day
-        habit.status = False
-    
-    habit.status = not habit.status
-    
-    new_log = HabitLog(habit_id=habit.habit_id, log_date=today, status=habit.status)
-    db.session.add(new_log)
+
+    # Check if the habit status is changing
+    if habit.status:
+        new_log = HabitLog(habit_id=habit.habit_id, log_date=datetime.utcnow(), status=True)
+        db.session.add(new_log)
+    else:
+        # Delete the corresponding log entry if habit is marked as not done
+        log_entry = HabitLog.query.filter_by(habit_id=habit.habit_id, log_date=datetime.utcnow()).first()
+        if log_entry:
+            db.session.delete(log_entry)
+
     db.session.commit()
-    
+
     return jsonify({'message': 'Habit tracked successfully'}), 200
+
 
 
 @app.route('/habit/mark_done/<int:habit_id>', methods=['POST'])
 def toggle_habit_done(habit_id):
     habit = Habit.query.get(habit_id)
-    # if habit and habit.user_id == current_user.id:
-    habit.status = not habit.status
-    db.session.commit()
-    return jsonify({'message': 'Habit status toggled'}), 200
-    # return jsonify({'message': 'Habit not found or unauthorized'}), 404
+    
+    if habit:
+        # Update habit status
+        previous_status = habit.status
+        habit.status = not habit.status
+        
+        if previous_status:  # If habit was marked as done
+            # Delete the corresponding log entry
+            log_entry = HabitLog.query.filter_by(habit_id=habit_id, log_date=datetime.utcnow()).first()
+            if log_entry:
+                db.session.delete(log_entry)
+        else:  # If habit was marked as not done
+            # Add a new log entry
+            log_entry = HabitLog(habit_id=habit_id, log_date=datetime.utcnow(), status=True)
+            db.session.add(log_entry)
+        
+        db.session.commit()
+        
+        return jsonify({'message': 'Habit status toggled successfully'}), 200
+    else:
+        return jsonify({'message': 'Habit not found'}), 404
+
+
 
 @app.route('/habit/update_name/<int:habit_id>', methods=['PUT'])
 def update_habit_name(habit_id):
