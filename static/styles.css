@@ -29,8 +29,42 @@ header {
     z-index: 1000; /* Ensure the header appears above other content */
 }
 
+.buttons-container {
+    position: fixed;
+    bottom: 0; /* Adjust the top value as needed to position the buttons below the header */
+    left: 0;
+    width: 100%;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    z-index: 999; /* Ensure the buttons appear above other content */
+    display: flex;
+    justify-content: center;
+  }
+  
+  .buttons-container button {
+    margin: 0 10px;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+  }
+  
+  .buttons-container button:hover {
+    background-color: #0056b3;
+    transform: scale(1.05);
+  }
+  
+  .buttons-container button:active {
+    transform: scale(0.95);
+  }
+  
+
 main {
-  padding: 75px 0 20px; /* Add padding at the top to create space for the fixed header */
+  padding: 85px 0 60px; /* Add padding at the top to create space for the fixed header */
   border-top: 1px solid #eee;
   display: flex;
   flex-direction: column;
@@ -235,19 +269,23 @@ button {
 
   /* Adjust grid layout for habit boxes on smaller screens */
   #habit-list {
-    grid-template-columns: 80%; /* Occupies 80% of the screen width */
-    gap: 10px; /* Reduce the gap between habit boxes */
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 35px; /* Gap between rows */
     justify-items: center;
     margin-top: 20px;
-    margin-bottom: 40px; /* Add more space at the bottom */
+    margin-bottom: 40px;
   }
-
+  
   .habit-box {
     width: 100%; /* Use full width of the grid container */
     margin: 0;
     padding: 5px; /* Adjust padding for habit boxes */
     font-size: 14px;
+    margin-top: 0; /* Add margin to the top of each box */
   }
+  
+  
   
   }
   

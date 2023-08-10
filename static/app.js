@@ -9,10 +9,7 @@ function renderHabitListPage() {
   appContainer.innerHTML = `
   <h2 class="habit-title">
     <span class="today-date"></span>
-    <span>Your Habits</span>
-    <button id="edit-habit">Edit</button>
-    <button id="delete-habit">Delete Habit</button>
-    <button id="add-habit">Add Habit</button> 
+    <span class="habit-subtitle">Your Habits</span>
   </h2>
   <ul id="habit-list">
       <!-- Habit items will be inserted here -->
@@ -56,7 +53,7 @@ function renderHabitListPage() {
     weekday: "short",
     year: "2-digit",
     month: "2-digit",
-    day: "2-digit"
+    day: "2-digit",
   });
   todayDateSpan.textContent = formattedDate;
 
@@ -92,11 +89,10 @@ async function fetchHabits() {
           if (!habitItem.classList.contains("done")) {
             trackHabit(habit.habit_id);
           }
+        });
+
+        habitList.appendChild(habitItem);
       });
-
-      habitList.appendChild(habitItem);
-
-    });
     } else {
       // Handle fetch habits error
     }
@@ -134,7 +130,7 @@ function enableEditMode() {
   // appContainer.classList.add("edit-mode"); // Add edit mode class
 
   // Update the title text to indicate editing mode
-  const habitTitle = document.querySelector(".habit-title span");
+  const habitTitle = document.querySelector(".habit-subtitle");
   habitTitle.textContent = "Your Habits - EDITING MODE";
   document.querySelector(".container").style.backgroundColor = "#d1d1d1";
 }
@@ -145,7 +141,7 @@ function enableDeleteMode() {
 
   // appContainer.classList.add("delete-mode");
   document.querySelector(".container").style.backgroundColor = "#bbb";
-  const habitTitle = document.querySelector(".habit-title span");
+  const habitTitle = document.querySelector(".habit-subtitle");
   habitTitle.textContent = "Your Habits - DELETE MODE";
 }
 
@@ -156,7 +152,7 @@ function exitDeleteMode() {
   // appContainer.classList.remove("delete-mode");
   document.querySelector(".container").style.backgroundColor = "#fff";
 
-  const habitTitle = document.querySelector(".habit-title span");
+  const habitTitle = document.querySelector(".habit-subtitle");
   habitTitle.textContent = "Your Habits";
 }
 
@@ -167,7 +163,7 @@ function exitEditMode() {
   // appContainer.classList.remove("edit-mode"); // Remove edit mode class
   document.querySelector(".container").style.backgroundColor = "#fff";
   // Reset the title text to normal
-  const habitTitle = document.querySelector(".habit-title span");
+  const habitTitle = document.querySelector(".habit-subtitle");
   habitTitle.textContent = "Your Habits";
 }
 
@@ -197,7 +193,6 @@ async function trackHabit(habitId) {
     const response = await fetch(`/habit/mark_done/${habitId}`, {
       method: "POST",
     });
-   
 
     if (response.ok) {
       const habitBox = document.querySelector(
