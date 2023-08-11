@@ -35,7 +35,7 @@ class HabitLog(db.Model):
     log_id = db.Column(db.Integer, primary_key=True)
     habit_id = db.Column(db.Integer, db.ForeignKey('habit.habit_id'), nullable=False)
     #user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False) #user is implied in the habit object with its user_id attribute
-    log_date = db.Column(db.Date, nullable=False)
+    log_date = db.Column(db.DateTime, nullable=False)
     # status = db.Column(db.Boolean, default=False)
 
 
@@ -185,7 +185,7 @@ def add_log_entry():
         if not habit_id or not habit_id.strip(): # Check for empty or whitespace-only habit id
             return jsonify({'message': 'Habit id cannot be empty!'}), 400
 
-        new_entry_log = HabitLog(h_id = habit_id, log_date = datetime.utcnow(), status = 1)
+        new_entry_log = HabitLog(h_id = habit_id, log_date = datetime.now(), status = 1)
         db.session.add(new_entry_log)
         db.session.commit()
 
@@ -249,13 +249,13 @@ def track_habit(habit_id):
 
     # Check if the habit status is changing
     if habit.status:
-        new_log = HabitLog(habit_id=habit.habit_id, log_date=datetime.utcnow(), status=True)
+        new_log = HabitLog(habit_id=habit.habit_id, log_date=datetime.now(), status=True)
         db.session.add(new_log)
-    else:
-        # Delete the corresponding log entry if habit is marked as not done
-        log_entry = HabitLog.query.filter_by(habit_id=habit.habit_id, log_date=datetime.utcnow()).first()
-        if log_entry:
-            db.session.delete(log_entry)
+    # else:
+    #     # Delete the corresponding log entry if habit is marked as not done
+    #     log_entry = HabitLog.query.filter_by(habit_id=habit.habit_id, log_date=datetime.utcnow()).first()
+    #     if log_entry:
+    #         db.session.delete(log_entry)
 
     db.session.commit()
 
@@ -269,7 +269,7 @@ def toggle_habit_done(habit_id):
 
     if habit:
         try:
-            new_log = HabitLog(habit_id=habit.habit_id, log_date=datetime.utcnow())
+            new_log = HabitLog(habit_id=habit.habit_id, log_date=datetime.now())
             db.session.add(new_log)
 
             habit.status = not habit.status
@@ -310,7 +310,7 @@ def index():
     return render_template('index.html')
 
 
-db.create_all()
+db.create_all() 
 
 if __name__ == '__main__':
     app.run(debug=True)
