@@ -342,6 +342,11 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 });
 
+const logoutButton = document.getElementById("logout");
 
+logoutButton.addEventListener("click", () => {
+  localStorage.removeItem("token"); // Remove the token from local storage
+  window.location.href = "/login"; // Redirect to the login page
+});
 
 renderHabitListPage();

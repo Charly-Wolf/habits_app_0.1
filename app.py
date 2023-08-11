@@ -45,13 +45,11 @@ def login():
         user = User.query.filter_by(username=username).first()
 
         if user and user.password == password:
-            print("\n\n\nnentered password: "+ password + " = db password:" + user.password +"\n\n\n")
             token = jwt.encode({'username': username, 'exp': datetime.utcnow() + timedelta(hours=1)}, app.config['SECRET_KEY'], algorithm='HS256')
 
             return jsonify({'token': token})  # Return the token as JSON response
         else:
-            print("\n\n\nEntered password: "+ password + " NOT = db password:" + user.password +"\n\n\n")
-            return jsonify({'message': 'Invalid credentials'}), 401 
+            return jsonify({'message': 'Invalid username or password'}), 401 
     return render_template('login.html')
 
 engine = create_engine('sqlite:///site.db')  # Replace with your database URL
