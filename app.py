@@ -121,7 +121,7 @@ def reset_habit_statuses():
         session.close()
 
 # Schedule the reset at 0:00 every day
-scheduler.add_job(reset_habit_statuses, 'cron', hour=0, minute=0)
+scheduler.add_job(reset_habit_statuses, 'cron', hour=13, minute=19) # OREGON TIME TEST
 
 # Start the scheduler
 scheduler.start()
