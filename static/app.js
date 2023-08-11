@@ -1,12 +1,12 @@
 // Entry point for the app
 const appContainer = document.getElementById("app");
 
-let editingMode = false; // Flag to track editing mode
-let deletingMode = false;
+// let editingMode = false; // Flag to track editing mode
+// let deletingMode = false;
 const currentDate = new Date();
 
-const editHabitsButton = document.getElementById("edit-habit");
-const deleteHabitsButton = document.getElementById("delete-habit");
+// const editHabitsButton = document.getElementById("edit-habit");
+// const deleteHabitsButton = document.getElementById("delete-habit");
 const addHabitButton = document.getElementById("add-habit");
 
 function renderHabitListPage() {
@@ -20,33 +20,33 @@ function renderHabitListPage() {
   </ul>
   `;
 
-  editHabitsButton.addEventListener("click", () => {
-    if (editingMode) {
-      exitEditMode(); // If already in edit mode, exit edit mode
-    } else if (deletingMode) {
-      // exitDeleteMode(); // If in delete mode, exit delete mode
-      enableEditMode();
-    } else {
-      enableEditMode(); // If not in edit or delete mode, enter edit mode
-    }
-  });
+  // editHabitsButton.addEventListener("click", () => {
+    // if (editingMode) {
+    //   exitEditMode(); // If already in edit mode, exit edit mode
+    // } else if (deletingMode) {
+    //   // exitDeleteMode(); // If in delete mode, exit delete mode
+    //   enableEditMode();
+    // } else {
+      // enableEditMode(); // If not in edit or delete mode, enter edit mode
+    // }
+  // });
 
-  deleteHabitsButton.addEventListener("click", () => {
-    if (deletingMode) {
-      // exitEditMode(); // If already in edit mode, exit edit mode
-      exitDeleteMode();
-    } else if (editingMode) {
-      enableDeleteMode();
-    } else {
-      enableDeleteMode(); // If not in edit or delete mode, enter delete mode
-    }
-  });
+  // deleteHabitsButton.addEventListener("click", () => {
+    // if (deletingMode) {
+    //   // exitEditMode(); // If already in edit mode, exit edit mode
+    //   exitDeleteMode();
+    // } else if (editingMode) {
+    //   enableDeleteMode();
+    // } else {
+      // enableDeleteMode(); // If not in edit or delete mode, enter delete mode
+    // }
+  // });
 
   addHabitButton.addEventListener("click", () => {
-    exitEditMode(); // Exit edit mode
-    exitDeleteMode(); // Exit delete mode
-    deleteHabitsButton.style.display = "none";
-    editHabitsButton.style.display = "none";
+    // exitEditMode(); // Exit edit mode
+    // exitDeleteMode(); // Exit delete mode
+    // deleteHabitsButton.style.display = "none";
+    // editHabitsButton.style.display = "none";
     addHabitButton.style.display = "none";
     renderAddHabitForm(); // Render the add habit form
   });
@@ -113,91 +113,91 @@ async function fetchHabits() {
   }
 }
 
-async function deleteHabit(habitId) {
-  try {
-    const response = await fetch(`/habit/${habitId}`, {
-      method: "DELETE",
-    });
+// async function deleteHabit(habitId) {
+//   try {
+//     const response = await fetch(`/habit/${habitId}`, {
+//       method: "DELETE",
+//     });
 
-    if (response.ok) {
-      // Refresh the habit list after deleting
-      fetchHabits();
-    } else {
-      // Handle delete habit error
-    }
+//     if (response.ok) {
+//       // Refresh the habit list after deleting
+//       fetchHabits();
+//     } else {
+//       // Handle delete habit error
+//     }
 
-    exitDeleteMode();
-  } catch (error) {
-    console.error("Error deleting habit:", error);
-    // Handle error
-  }
-}
+//     exitDeleteMode();
+//   } catch (error) {
+//     console.error("Error deleting habit:", error);
+//     // Handle error
+//   }
+// }
 
-function enableEditMode() {
-  editingMode = true;
-  deletingMode = false;
+// function enableEditMode() {
+//   editingMode = true;
+//   deletingMode = false;
 
-  // Add a class to the appContainer to indicate editing mode
-  // appContainer.classList.add("edit-mode"); // Add edit mode class
+//   // Add a class to the appContainer to indicate editing mode
+//   // appContainer.classList.add("edit-mode"); // Add edit mode class
 
-  // Update the title text to indicate editing mode
-  const habitTitle = document.querySelector(".habit-subtitle");
-  habitTitle.textContent = "Your Habits - EDITING MODE";
-  document.querySelector(".container").style.backgroundColor = "#d1d1d1";
-}
+//   // Update the title text to indicate editing mode
+//   const habitTitle = document.querySelector(".habit-subtitle");
+//   habitTitle.textContent = "Your Habits - EDITING MODE";
+//   document.querySelector(".container").style.backgroundColor = "#d1d1d1";
+// }
 
-function enableDeleteMode() {
-  deletingMode = true;
-  editingMode = false;
+// function enableDeleteMode() {
+//   deletingMode = true;
+//   editingMode = false;
 
-  // appContainer.classList.add("delete-mode");
-  document.querySelector(".container").style.backgroundColor = "#bbb";
-  const habitTitle = document.querySelector(".habit-subtitle");
-  habitTitle.textContent = "Your Habits - DELETE MODE";
-}
+//   // appContainer.classList.add("delete-mode");
+//   document.querySelector(".container").style.backgroundColor = "#bbb";
+//   const habitTitle = document.querySelector(".habit-subtitle");
+//   habitTitle.textContent = "Your Habits - DELETE MODE";
+// }
 
-// Add this function to exit delete mode
-function exitDeleteMode() {
-  deletingMode = false;
+// // Add this function to exit delete mode
+// function exitDeleteMode() {
+//   deletingMode = false;
 
-  // appContainer.classList.remove("delete-mode");
-  document.querySelector(".container").style.backgroundColor = "#fff";
+//   // appContainer.classList.remove("delete-mode");
+//   document.querySelector(".container").style.backgroundColor = "#fff";
 
-  const habitTitle = document.querySelector(".habit-subtitle");
-  habitTitle.textContent = "Your Habits";
-}
+//   const habitTitle = document.querySelector(".habit-subtitle");
+//   habitTitle.textContent = "Your Habits";
+// }
 
-function exitEditMode() {
-  editingMode = false; // Exit edit mode
+// function exitEditMode() {
+//   editingMode = false; // Exit edit mode
 
-  // deletingMode = false;
-  // appContainer.classList.remove("edit-mode"); // Remove edit mode class
-  document.querySelector(".container").style.backgroundColor = "#fff";
-  // Reset the title text to normal
-  const habitTitle = document.querySelector(".habit-subtitle");
-  habitTitle.textContent = "Your Habits";
-}
+//   // deletingMode = false;
+//   // appContainer.classList.remove("edit-mode"); // Remove edit mode class
+//   document.querySelector(".container").style.backgroundColor = "#fff";
+//   // Reset the title text to normal
+//   const habitTitle = document.querySelector(".habit-subtitle");
+//   habitTitle.textContent = "Your Habits";
+// }
 
 async function trackHabit(habitId) {
-  if (editingMode) {
-    // Handle editing logic here
-    const habitToEdit = await fetchHabitById(habitId); // Fetch the habit data
+  // if (editingMode) {
+  //   // Handle editing logic here
+  //   const habitToEdit = await fetchHabitById(habitId); // Fetch the habit data
 
-    if (habitToEdit) {
-      const newHabitName = prompt("Enter new habit name:", habitToEdit.name); // Populate the prompt with the current habit name
-      if (newHabitName !== null) {
-        await updateHabitName(habitId, newHabitName);
-        // Refresh the habit list after editing
-        fetchHabits();
-      }
-      exitEditMode();
-    }
-  } else if (deletingMode) {
-    const confirmed = confirm("Are you sure you want to delete this habit?");
-    if (confirmed) {
-      deleteHabit(habitId); // Call the deleteHabit function
-    }
-  } else {
+  //   if (habitToEdit) {
+  //     const newHabitName = prompt("Enter new habit name:", habitToEdit.name); // Populate the prompt with the current habit name
+  //     if (newHabitName !== null) {
+  //       await updateHabitName(habitId, newHabitName);
+  //       // Refresh the habit list after editing
+  //       fetchHabits();
+  //     }
+  //     exitEditMode();
+  //   }
+  // } else if (deletingMode) {
+  //   const confirmed = confirm("Are you sure you want to delete this habit?");
+  //   if (confirmed) {
+  //     deleteHabit(habitId); // Call the deleteHabit function
+  //   }
+  // } else {
     console.log("CHANGE STATUS");
     // Original trackHabit logic for tracking status
 
@@ -216,7 +216,7 @@ async function trackHabit(habitId) {
     } else {
       // Handle track habit error
     }
-  }
+  // }
 }
 
 // Function to fetch habit by ID
@@ -274,9 +274,9 @@ function renderAddHabitForm() {
 }
 
 async function backtohabits() {
-  deleteHabitsButton.style.display = "flex";
-  editHabitsButton.style.display = "flex";
-  addHabitButton.style.display = "flex";
+  // deleteHabitsButton.style.display = "flex";
+  // editHabitsButton.style.display = "flex";
+  // addHabitButton.style.display = "flex";
   renderHabitListPage();
 }
 
@@ -321,8 +321,8 @@ async function handleAddHabit(event) {
     });
 
     if (response.ok) {
-      deleteHabitsButton.style.display = "flex";
-      editHabitsButton.style.display = "flex";
+      // deleteHabitsButton.style.display = "flex";
+      // editHabitsButton.style.display = "flex";
       addHabitButton.style.display = "flex";
       renderHabitListPage();
     } else {
