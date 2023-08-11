@@ -5,6 +5,10 @@ let editingMode = false; // Flag to track editing mode
 let deletingMode = false;
 const currentDate = new Date();
 
+const editHabitsButton = document.getElementById("edit-habit");
+const deleteHabitsButton = document.getElementById("delete-habit");
+const addHabitButton = document.getElementById("add-habit");
+
 function renderHabitListPage() {
   appContainer.innerHTML = `
   <h2 class="habit-title">
@@ -15,10 +19,6 @@ function renderHabitListPage() {
       <!-- Habit items will be inserted here -->
   </ul>
   `;
-
-  const editHabitsButton = document.getElementById("edit-habit");
-  const deleteHabitsButton = document.getElementById("delete-habit");
-  const addHabitButton = document.getElementById("add-habit");
 
   editHabitsButton.addEventListener("click", () => {
     if (editingMode) {
@@ -45,6 +45,9 @@ function renderHabitListPage() {
   addHabitButton.addEventListener("click", () => {
     exitEditMode(); // Exit edit mode
     exitDeleteMode(); // Exit delete mode
+    deleteHabitsButton.style.display = "none";
+    editHabitsButton.style.display = "none";
+    addHabitButton.style.display = "none";
     renderAddHabitForm(); // Render the add habit form
   });
 
@@ -62,8 +65,16 @@ function renderHabitListPage() {
 
 async function fetchHabits() {
   try {
+    //const token = localStorage.getItem("token");
+
+    const headers = {
+      //"Authorization": `Bearer ${token}`,
+      "Content-Type": "application/json"
+    };
+
     const response = await fetch("/habits", {
       method: "GET",
+      credentials: 'include'  // Include cookies with the request
     });
 
     if (response.ok) {
@@ -233,10 +244,6 @@ async function updateHabitName(habitId, newName) {
   try {
     const response = await fetch(`/habit/update_name/${habitId}`, {
       method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ name: newName }),
     });
 
     if (!response.ok) {
@@ -263,7 +270,14 @@ function renderAddHabitForm() {
   addHabitForm.addEventListener("submit", handleAddHabit);
 
   const backToHabitsButton = document.getElementById("back-to-habits");
-  backToHabitsButton.addEventListener("click", renderHabitListPage);
+  backToHabitsButton.addEventListener("click", backtohabits);
+}
+
+async function backtohabits() {
+  deleteHabitsButton.style.display = "flex";
+  editHabitsButton.style.display = "flex";
+  addHabitButton.style.display = "flex";
+  renderHabitListPage();
 }
 
 async function handleAddHabit(event) {
@@ -284,6 +298,7 @@ async function handleAddHabit(event) {
         const errorData = await response.json();
         alert(errorData.message); // Display the validation message from the backend
       }
+
     } catch (error) {
       console.error("Error adding habit:", error);
       const errorContainer = document.createElement("p");
@@ -306,6 +321,9 @@ async function handleAddHabit(event) {
     });
 
     if (response.ok) {
+      deleteHabitsButton.style.display = "flex";
+      editHabitsButton.style.display = "flex";
+      addHabitButton.style.display = "flex";
       renderHabitListPage();
     } else {
       const errorData = await response.json();
@@ -320,33 +338,42 @@ async function handleAddHabit(event) {
   }
 }
 
+//document.addEventListener("DOMContentLoaded", () => {
+  //const token = localStorage.getItem("token");
 
-// app.js
-
-document.addEventListener("DOMContentLoaded", () => {
-  const token = localStorage.getItem("token");
-  
-  if (token) {
+  //if (token) {
     // Attach the token to the headers of authenticated requests
-    const headers = {
-      "Authorization": `Bearer ${token}`
-    };
+    //const headers = {
+      //Authorization: `Bearer ${token}`,
+    //};
 
-    // Your fetch requests here will include the token in the headers
-    // Example: fetch('/habits', { headers });
-
+    // TO DO: QUESTION: Do I have to do something here for each action? fetch habits, add habits, etc.?
+    // Fetch user-specific data using the token
     // ...
-  } else {
+  //} else {
     // Redirect to the login page if the token is not present
-    window.location.href = "/login";
-  }
-});
+    //window.location.href = "/login";
+  //}
+//});
+
 
 const logoutButton = document.getElementById("logout");
 
-logoutButton.addEventListener("click", () => {
-  localStorage.removeItem("token"); // Remove the token from local storage
-  window.location.href = "/login"; // Redirect to the login page
+logoutButton.addEventListener("click", async () => {
+  try {
+    const response = await fetch("/logout", {
+      method: "POST",
+    });
+
+    if (response.ok) {
+      // Clear any local storage or other client-side data if needed
+      window.location.href = "/login"; // Redirect to the login page after successful logout
+    } else {
+      console.error("Logout failed");
+    }
+  } catch (error) {
+    console.error("An error occurred during logout:", error);
+  }
 });
 
 renderHabitListPage();

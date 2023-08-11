@@ -5,11 +5,14 @@ from datetime import datetime, timedelta
 from apscheduler.schedulers.background import BackgroundScheduler
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import create_engine
-import jwt
+from flask import make_response
+from flask import redirect, url_for
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'P@ssW0rd#'
+app.config['SECRET_KEY'] = "P@ssW0rd#"
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
+
+
 db = SQLAlchemy(app)
 CORS(app)  # Enable CORS for all routes
 
@@ -21,7 +24,7 @@ class User(db.Model):
 
 class Habit(db.Model):
     habit_id = db.Column(db.Integer, primary_key=True)
-    #user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     name = db.Column(db.String(100), nullable=False)
     status = db.Column(db.Boolean, default=False)
     #created_at = db.Column(db.DateTime, default=datetime.utcnow) 
@@ -31,8 +34,10 @@ class Habit(db.Model):
 class HabitLog(db.Model):
     log_id = db.Column(db.Integer, primary_key=True)
     habit_id = db.Column(db.Integer, db.ForeignKey('habit.habit_id'), nullable=False)
+    #user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False) #user is implied in the habit object with its user_id attribute
     log_date = db.Column(db.Date, nullable=False)
     # status = db.Column(db.Boolean, default=False)
+
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -45,12 +50,28 @@ def login():
         user = User.query.filter_by(username=username).first()
 
         if user and user.password == password:
-            token = jwt.encode({'username': username, 'exp': datetime.utcnow() + timedelta(hours=1)}, app.config['SECRET_KEY'], algorithm='HS256')
 
-            return jsonify({'token': token})  # Return the token as JSON response
+            #token_payload = {'username': username, 'user_id': user.id, 'exp': datetime.utcnow() + timedelta(hours=1)}
+            #token = jwt.encode({'username': username, 'exp': datetime.utcnow() + timedelta(hours=1)}, app.config['SECRET_KEY'], algorithm='HS256')
+            #session['user_id'] = user.id
+            #return jsonify({'token': token})  # Return the token as JSON response
+            # return jsonify({'message': 'Login successful'}), 200
+            response = make_response(jsonify({'message': 'Login successful'}), 200)
+            response.set_cookie('user_id', str(user.id))  # Set the user_id cookie
+
+            #print("\n\n\nCookies: " + str(request.cookies['user_id']) + "\n\n\n")
+
+            return response
         else:
             return jsonify({'message': 'Invalid username or password'}), 401 
     return render_template('login.html')
+
+@app.route('/logout', methods=['POST'])
+def logout():
+    response = make_response(jsonify({'message': 'Logged out'}), 200)
+    response.delete_cookie('user_id')  # Clear the user_id cookie
+    return response
+
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -105,7 +126,14 @@ scheduler.start()
 
 @app.route('/habits', methods=['GET'])
 def get_habits():
-    habits = Habit.query.all()  # Fetch all habits from the database
+
+    user_id = request.cookies.get('user_id')  # Get user ID from the cookie
+    print("\n\nUSER ID: "+str(user_id)+"\n\n")
+    if user_id is None:
+        return jsonify({'message': 'User not logged in'}), 401
+
+
+    habits = Habit.query.filter_by(user_id=user_id).all()  # Fetch user's habits
     habit_list = []
 
     for habit in habits:
@@ -171,11 +199,14 @@ def add_habit():
     try:
         data = request.get_json()
         habit_name = data.get('name')
+        print("\n\n\nADDING HABIT WITH USER ID:" + request.cookies.get('user_id')+"\n\n\n")
+        user_id = request.cookies.get('user_id') 
 
-        if not habit_name or not habit_name.strip():  # Check for empty or whitespace-only habit name
+        if not habit_name or not habit_name.strip():
             return jsonify({'message': 'Habit name cannot be empty!'}), 400
 
-        new_habit = Habit(name=habit_name)
+        new_habit = Habit(user_id=user_id, name=habit_name)  # Associate habit with the user
+
         db.session.add(new_habit)
         db.session.commit()
 
@@ -252,8 +283,6 @@ def toggle_habit_done(habit_id):
 
 
 
-
-
 @app.route('/habit/update_name/<int:habit_id>', methods=['PUT'])
 def update_habit_name(habit_id):
     habit = Habit.query.get_or_404(habit_id)
@@ -275,6 +304,9 @@ def update_habit_name(habit_id):
 
 @app.route('/')
 def index():
+    user_id = request.cookies.get('user_id')
+    if user_id is None:
+        return redirect(url_for('login'))  # Redirect to the login page if user is not logged in
     return render_template('index.html')
 
 

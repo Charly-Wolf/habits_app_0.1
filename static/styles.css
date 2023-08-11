@@ -179,6 +179,14 @@ button {
     transform: scale(0.95); /* Slightly scale down on active */
   }
 
+  #logout {
+    background-color: red;
+  }
+
+  #logout:hover {
+    background-color:rgb(114, 12, 12)
+  }
+
 /* Other styles */
 .error-message {
   color: red;
