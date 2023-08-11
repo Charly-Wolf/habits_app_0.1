@@ -10,8 +10,8 @@ from flask import redirect, url_for
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = "P@ssW0rd#"
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
-
+#app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://test_db_7vup_user:vN2FuqTTQv3Eng3LmcnYBW4ii6PkuxYE@dpg-cjb50c3bq8nc73bmg13g-a.oregon-postgres.render.com/test_db_7vup'
 
 db = SQLAlchemy(app)
 CORS(app)  # Enable CORS for all routes
