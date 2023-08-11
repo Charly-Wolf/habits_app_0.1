@@ -320,4 +320,28 @@ async function handleAddHabit(event) {
   }
 }
 
+
+// app.js
+
+document.addEventListener("DOMContentLoaded", () => {
+  const token = localStorage.getItem("token");
+  
+  if (token) {
+    // Attach the token to the headers of authenticated requests
+    const headers = {
+      "Authorization": `Bearer ${token}`
+    };
+
+    // Your fetch requests here will include the token in the headers
+    // Example: fetch('/habits', { headers });
+
+    // ...
+  } else {
+    // Redirect to the login page if the token is not present
+    window.location.href = "/login";
+  }
+});
+
+
+
 renderHabitListPage();
