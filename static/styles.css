@@ -17,51 +17,54 @@ body {
 }
 
 header {
-    text-align: center;
-    margin-bottom: 20px;
-    position: fixed; /* Add fixed positioning */
-    top: 0; /* Stick the header to the top */
-    left: 0;
-    width: 100%; /* Make the header full-width */
-    background-color: #fff; /* Add a background color */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    padding: 5px 10px; /* Add some padding for spacing */
-    z-index: 1000; /* Ensure the header appears above other content */
+  text-align: center;
+  margin-bottom: 20px;
+  position: fixed; /* Add fixed positioning */
+  top: 0; /* Stick the header to the top */
+  left: 0;
+  width: 100%; /* Make the header full-width */
+  background-color: #fff; /* Add a background color */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 5px 10px; /* Add some padding for spacing */
+  z-index: 1000; /* Ensure the header appears above other content */
+}
+
+#empty-habits-text {
+  display: none;
 }
 
 .buttons-container {
-    position: fixed;
-    bottom: 0; /* Adjust the top value as needed to position the buttons below the header */
-    left: 0;
-    width: 100%;
-    background-color: #fff;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    padding: 20px;
-    z-index: 999; /* Ensure the buttons appear above other content */
-    display: flex;
-    justify-content: center;
-  }
-  
-  .buttons-container button {
-    margin: 0 10px;
-    padding: 10px 20px;
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.3s, transform 0.2s;
-  }
-  
-  .buttons-container button:hover {
-    background-color: #0056b3;
-    transform: scale(1.05);
-  }
-  
-  .buttons-container button:active {
-    transform: scale(0.95);
-  }
-  
+  position: fixed;
+  bottom: 0; /* Adjust the top value as needed to position the buttons below the header */
+  left: 0;
+  width: 100%;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  z-index: 999; /* Ensure the buttons appear above other content */
+  display: flex;
+  justify-content: center;
+}
+
+.buttons-container button {
+  margin: 0 10px;
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+.buttons-container button:hover {
+  background-color: #0056b3;
+  transform: scale(1.05);
+}
+
+.buttons-container button:active {
+  transform: scale(0.95);
+}
 
 main {
   padding: 85px 0 60px; /* Add padding at the top to create space for the fixed header */
@@ -72,8 +75,8 @@ main {
 }
 
 .habit-name {
-    user-select: none;
-  }
+  user-select: none;
+}
 
 /* Style for habit boxes */
 #habit-list {
@@ -86,33 +89,31 @@ main {
 
 /* Style for habit boxes */
 .habit-box {
-    width: 100%;
-    height: 100px;
-    padding: 10px;
-    border: 1px solid #ccc;
-    background-color: #fff;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: background-color 0.3s, border-color 0.3s;
-    margin: 0 25px;
-    padding: 2px;
-  }
-  
-  /* Hover effect for completed habit boxes */
-  .habit-box.done:hover {
-    background-color: #92c492; /* Change to your desired color */
-    border-color: #65a765; /* Change to your desired color */
-  }
-  
-  /* Hover effect for not completed habit boxes */
-  .habit-box:not(.done):hover {
-    background-color: #a8a2a2; /* Change to your desired color */
-    border-color: #999; /* Change to your desired color */
-  }
-  
-  
+  width: 100%;
+  height: 100px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  background-color: #fff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s, border-color 0.3s;
+  margin: 0 25px;
+  padding: 2px;
+}
+
+/* Hover effect for completed habit boxes */
+.habit-box.done:hover {
+  background-color: #92c492; /* Change to your desired color */
+  border-color: #65a765; /* Change to your desired color */
+}
+
+/* Hover effect for not completed habit boxes */
+.habit-box:not(.done):hover {
+  background-color: #a8a2a2; /* Change to your desired color */
+  border-color: #999; /* Change to your desired color */
+}
 
 .habit-box {
   width: 100%;
@@ -130,15 +131,15 @@ main {
 }
 
 .habit-box span {
-    transform: scale(1); /* Default size */
-    transition: transform 0.3s;
-  }
+  transform: scale(1); /* Default size */
+  transition: transform 0.3s;
+}
 
 /* Increase text size on hover */
 .habit-box:hover span {
-    transform: scale(1.20); /* Adjust the scale factor as needed */
-    transition: transform 0.3s;
-  }
+  transform: scale(1.2); /* Adjust the scale factor as needed */
+  transition: transform 0.3s;
+}
 
 /* Style for completed habit boxes */
 .habit-box.done {
@@ -149,8 +150,8 @@ main {
 
 /* Style for slashed text */
 .habit-box.done span {
-    text-decoration: line-through;
-  }
+  text-decoration: line-through;
+}
 
 /* Style for not completed habit boxes */
 .habit-box:not(.done) {
@@ -161,31 +162,31 @@ main {
 
 /* Modern button styles */
 button {
-    padding: 10px 20px;
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.3s, transform 0.2s;
-  }
-  
-  button:hover {
-    background-color: #0056b3;
-    transform: scale(1.05); /* Slightly scale up on hover */
-  }
-  
-  button:active {
-    transform: scale(0.95); /* Slightly scale down on active */
-  }
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+}
 
-  #logout {
-    background-color: red;
-  }
+button:hover {
+  background-color: #0056b3;
+  transform: scale(1.05); /* Slightly scale up on hover */
+}
 
-  #logout:hover {
-    background-color:rgb(114, 12, 12)
-  }
+button:active {
+  transform: scale(0.95); /* Slightly scale down on active */
+}
+
+#logout {
+  background-color: red;
+}
+
+#logout:hover {
+  background-color: rgb(114, 12, 12);
+}
 
 /* Other styles */
 .error-message {
@@ -206,38 +207,34 @@ button {
 
 /* Style for the delete button */
 .delete-button {
-    position: absolute;
-    top: 5px;
-    right: 5px;
-    width: 20px;
-    height: 20px;
-    background-color: red;
-    border: none;
-    border-radius: 50%;
-    color: white;
-    font-size: 14px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-  } 
-  
-
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  width: 20px;
+  height: 20px;
+  background-color: red;
+  border: none;
+  border-radius: 50%;
+  color: white;
+  font-size: 14px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
 
 /* Original styles for larger screens */
 
 /* For screens with a maximum width of 600px */
 @media (max-width: 600px) {
-    
-  
-    .container {
-      max-width: 100%;
-      margin: 0;
-      padding: 0;
-    }
-    
-/* Modern button styles for smaller screens */
-button {
+  .container {
+    max-width: 100%;
+    margin: 0;
+    padding: 0;
+  }
+
+  /* Modern button styles for smaller screens */
+  button {
     padding: 12px 0; /* Adjust padding for vertical spacing */
     /* font-size: 20px; Increase font size */
     border-radius: 4px;
@@ -284,7 +281,7 @@ button {
     margin-top: 20px;
     margin-bottom: 40px;
   }
-  
+
   .habit-box {
     width: 100%; /* Use full width of the grid container */
     margin: 0;
@@ -292,8 +289,4 @@ button {
     font-size: 14px;
     margin-top: 0; /* Add margin to the top of each box */
   }
-  
-  
-  
-  }
-  
+}
