@@ -113,23 +113,18 @@ main {
   border-color: #65a765; /* Change to your desired color */
 }
 
+.habit-box:not(.done):hover span {
+  display: none;
+}
+
+.habit-box:hover:not(.done)::before {
+  content: "DONE?"; /* Replace with the desired text */
+}
+
 /* Hover effect for not completed habit boxes */
 .habit-box:not(.done):hover {
   background-color: #a8a2a2; /* Change to your desired color */
   border-color: #999; /* Change to your desired color */
-}
-
-.habit-box.delete-modus:hover {
-  background-color: #b84461;
-}
-
-.habit-box.delete-modus:hover span {
-  color: #3d0412;
-  display: none;
-}
-
-.habit-box:hover.delete-modus::before {
-  content: "DELETE"; /* Replace with the desired text */
 }
 
 .habit-box span {
@@ -188,6 +183,22 @@ button:active {
 
 #logout:hover {
   background-color: rgb(114, 12, 12);
+}
+
+.habit-box.delete-modus:hover {
+  background-color: #b43555;
+}
+.habit-box.delete-modus {
+  background-color: #f298ae;
+}
+
+.habit-box.delete-modus:hover span {
+  display: none;
+}
+
+.habit-box:hover.delete-modus::before {
+  color: #ffffff;
+  content: "DELETE"; /* Replace with the desired text */
 }
 
 /* Other styles */
