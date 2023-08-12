@@ -32,6 +32,7 @@ header {
 #empty-habits-text {
   display: none;
   margin: 10vh 10vw;
+  text-align: center;
 }
 
 #empty-habits-text {
