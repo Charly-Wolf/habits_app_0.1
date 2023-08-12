@@ -15,7 +15,7 @@ function renderHabitListPage() {
     <span class="today-date"></span>
     <span class="habit-subtitle">Your Habits</span>
   </h2>
-  <h2 id="empty-habits-text">No habits... add one to start 🤓</h2>
+  <h2 id="empty-habits-text">No habits... add one to start 🤓 For example "Workout" or "Practice Japanese"</h2>
   <ul id="habit-list">
       
       <!-- Habit items will be inserted here -->
