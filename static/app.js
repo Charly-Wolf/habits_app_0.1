@@ -171,7 +171,10 @@ function enableDeleteMode() {
 
   const habitBoxes = document.querySelectorAll(".habit-box");
   habitBoxes.forEach((habitBox) => {
-    habitBox.classList.add("delete-modus");
+    if (!habitBox.classList.contains("done")) {
+      habitBox.classList.add("delete-modus");
+    }
+    
   });
 
   habitTitle.textContent = "Your Habits - DELETE MODE";
