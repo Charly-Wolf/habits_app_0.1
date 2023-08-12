@@ -74,8 +74,11 @@ function renderHabitListPage() {
   fetchHabits();
 }
 
-async function toggleDeleteButton(habits){
-  deleteHabitsButton.style.display = habits.length === 0 || habits.every(habit => habit.status)? "none" : "flex"; 
+async function toggleDeleteButton(habits) {
+  deleteHabitsButton.style.display =
+    habits.length === 0 || habits.every((habit) => habit.status)
+      ? "none"
+      : "flex";
 }
 
 async function fetchHabits() {
@@ -97,7 +100,7 @@ async function fetchHabits() {
       const habitList = document.getElementById("habit-list");
       habitList.innerHTML = "";
 
-      toggleDeleteButton(habits);    
+      toggleDeleteButton(habits);
 
       const emptyHabitsText = document.getElementById("empty-habits-text");
       emptyHabitsText.style.display = habits.length === 0 ? "block" : "none";
@@ -146,7 +149,7 @@ async function deleteHabit(habitId) {
       // Handle delete habit error
     }
 
-    exitDeleteMode();
+    // exitDeleteMode();
   } catch (error) {
     console.error("Error deleting habit:", error);
     // Handle error
@@ -179,7 +182,6 @@ function enableDeleteMode() {
     if (!habitBox.classList.contains("done")) {
       habitBox.classList.add("delete-modus");
     }
-    
   });
 
   habitTitle.textContent = "Your Habits - DELETE MODE";
@@ -230,20 +232,24 @@ async function trackHabit(habitId) {
   if (deletingMode) {
     const confirmed = confirm("Are you sure you want to delete this habit?");
     if (confirmed) {
+      alert("DELETED");
       deleteHabit(habitId); // Call the deleteHabit function
+    } else {
+      alert("CANCELLED DELETING");
     }
+    exitDeleteMode();
   } else {
     console.log("CHANGE STATUS");
     // Original trackHabit logic for tracking status
 
-  const response = await fetch(`/habit/mark_done/${habitId}`, {
-    method: "POST",
-  });
+    const response = await fetch(`/habit/mark_done/${habitId}`, {
+      method: "POST",
+    });
 
-  if (response.ok) {
-    const habitBox = document.querySelector(
-      `.habit-box[data-habit-id="${habitId}"]`
-    );
+    if (response.ok) {
+      const habitBox = document.querySelector(
+        `.habit-box[data-habit-id="${habitId}"]`
+      );
 
       if (habitBox) {
         habitBox.classList.add("done"); // Add the "done" class
@@ -252,7 +258,7 @@ async function trackHabit(habitId) {
       // Handle track habit error
     }
   }
-  await fetchHabits()
+  await fetchHabits();
 }
 
 // Function to fetch habit by ID
