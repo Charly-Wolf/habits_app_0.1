@@ -40,6 +40,7 @@ function renderHabitListPage() {
       
       <!-- Habit items will be inserted here -->
   </ul>
+  <button id="add-button-2" style="margin: auto">Add Habit</button>
   `;
 
   // editHabitsButton.addEventListener("click", () => {
@@ -103,6 +104,19 @@ async function fetchHabits() {
 
       const emptyHabitsText = document.getElementById("empty-habits-text");
       emptyHabitsText.style.display = habits.length === 0 ? "block" : "none";
+
+      const addHabitButton2 = document.getElementById("add-button-2");
+      addHabitButton2.addEventListener("click", () => {
+        // exitEditMode(); // Exit edit mode
+        exitDeleteMode(); // Exit delete mode
+        deleteHabitsButton.style.display = "none";
+        addHabitButton.style.display = "none";
+        // editHabitsButton.style.display = "none";
+        addHabitButton2.style.display = "none";
+        renderAddHabitForm(); // Render the add habit form
+      });
+      addHabitButton2.style.display = habits.length === 0 ? "flex" : "none";
+      addHabitButton.style.display = habits.length === 0 ? "none" : "flex";
 
       habits.forEach((habit) => {
         const habitItem = document.createElement("li");
