@@ -232,10 +232,8 @@ async function trackHabit(habitId) {
   if (deletingMode) {
     const confirmed = confirm("Are you sure you want to delete this habit?");
     if (confirmed) {
-      alert("DELETED");
+      // alert("DELETED");
       deleteHabit(habitId); // Call the deleteHabit function
-    } else {
-      alert("CANCELLED DELETING");
     }
     exitDeleteMode();
   } else {
