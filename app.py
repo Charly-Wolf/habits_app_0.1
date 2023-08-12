@@ -316,6 +316,20 @@ def index():
 
 db.create_all() 
 
+#DEBUG###################################
+users = User.query.all()  # Fetch users
+users_list = []
+for user in users:
+    users_data = {
+        "username": user.username,
+        "id": user.id,
+    }
+    users_list.append(users_data)
+print("\n\n----------")
+for user in users_list:
+    print(str(user["id"]) + " - " + user["username"] )
+print("\n\n----------")
+###############################################
 
 if __name__ == '__main__':
     app.run

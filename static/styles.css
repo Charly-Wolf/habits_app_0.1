@@ -249,10 +249,10 @@ button:active {
 
   /* Modern button styles for smaller screens */
   button {
-    padding: 12px 0; /* Adjust padding for vertical spacing */
+    padding: 12px 20px; /* Adjust padding for vertical spacing */
     /* font-size: 20px; Increase font size */
     border-radius: 4px;
-    width: 8rem;
+    /* width: 8rem; */
     margin: 10px 10px; /* Add spacing above, between, and below buttons */
     white-space: normal; /* Allow the button text to wrap */
     overflow: hidden; /* Hide any overflow */
