@@ -61,8 +61,6 @@ def login():
             response = make_response(jsonify({'message': 'Login successful'}), 200)
             response.set_cookie('user_id', str(user.id))  # Set the user_id cookie
 
-            #print("\n\n\nCookies: " + str(request.cookies['user_id']) + "\n\n\n")
-
             return response
         else:
             return jsonify({'message': 'Invalid username or password'}), 401 
@@ -130,12 +128,11 @@ scheduler.start()
 def get_habits():
 
     user_id = request.cookies.get('user_id')  # Get user ID from the cookie
-    print("\n\nUSER ID: "+str(user_id)+"\n\n")
     if user_id is None:
         return jsonify({'message': 'User not logged in'}), 401
 
 
-    habits = Habit.query.filter_by(user_id=user_id).all()  # Fetch user's habits
+    habits = Habit.query.filter_by(user_id=user_id).order_by(Habit.name).all()  # Fetch user's habits ordered by name
     habit_list = []
 
     for habit in habits:
@@ -201,7 +198,6 @@ def add_habit():
     try:
         data = request.get_json()
         habit_name = data.get('name')
-        print("\n\n\nADDING HABIT WITH USER ID:" + request.cookies.get('user_id')+"\n\n\n")
         user_id = request.cookies.get('user_id') 
 
         if not habit_name or not habit_name.strip():
