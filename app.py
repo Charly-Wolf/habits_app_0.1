@@ -10,9 +10,9 @@ from flask import redirect, url_for
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = "P@ssW0rd#"
-#app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
 #app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://test_db_7vup_user:vN2FuqTTQv3Eng3LmcnYBW4ii6PkuxYE@dpg-cjb50c3bq8nc73bmg13g-a.oregon-postgres.render.com/test_db_7vup'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://test_db_7vup_user:vN2FuqTTQv3Eng3LmcnYBW4ii6PkuxYE@dpg-cjb50c3bq8nc73bmg13g-a/test_db_7vup'
+#app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://test_db_7vup_user:vN2FuqTTQv3Eng3LmcnYBW4ii6PkuxYE@dpg-cjb50c3bq8nc73bmg13g-a/test_db_7vup'
 
 
 db = SQLAlchemy(app)
@@ -119,7 +119,7 @@ def reset_habit_statuses():
         session.close()
 
 # Schedule the reset at 0:00 every day
-scheduler.add_job(reset_habit_statuses, 'cron', hour=0, minute=0)
+scheduler.add_job(reset_habit_statuses, 'cron', hour=13, minute=24) # OREGON TIME TEST
 
 # Start the scheduler
 scheduler.start()

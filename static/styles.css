@@ -34,6 +34,10 @@ header {
   margin: 10vh 10vw;
 }
 
+#empty-habits-text {
+  display: none;
+}
+
 .buttons-container {
   position: fixed;
   bottom: 0; /* Adjust the top value as needed to position the buttons below the header */
@@ -103,7 +107,6 @@ main {
   margin: 0 25px;
   padding: 2px;
 }
-
 /* Hover effect for completed habit boxes */
 .habit-box.done:hover {
   background-color: #92c492; /* Change to your desired color */
@@ -116,19 +119,17 @@ main {
   border-color: #999; /* Change to your desired color */
 }
 
-.habit-box {
-  width: 100%;
-  height: 100px;
-  padding: 10px;
-  border: 1px solid #ccc;
-  background-color: #fff;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: background-color 0.3s, border-color 0.3s;
-  margin: 0 25px;
-  padding: 2px;
+.habit-box.delete-modus:hover {
+  background-color: #b84461;
+}
+
+.habit-box.delete-modus:hover span {
+  color: #3d0412;
+  display: none;
+}
+
+.habit-box:hover.delete-modus::before {
+  content: "DELETE"; /* Replace with the desired text */
 }
 
 .habit-box span {
