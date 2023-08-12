@@ -15,31 +15,33 @@ function renderHabitListPage() {
     <span class="today-date"></span>
     <span class="habit-subtitle">Your Habits</span>
   </h2>
+  <h2 id="empty-habits-text">No habits... add one to start 🤓</h2>
   <ul id="habit-list">
+      
       <!-- Habit items will be inserted here -->
   </ul>
   `;
 
   // editHabitsButton.addEventListener("click", () => {
-    // if (editingMode) {
-    //   exitEditMode(); // If already in edit mode, exit edit mode
-    // } else if (deletingMode) {
-    //   // exitDeleteMode(); // If in delete mode, exit delete mode
-    //   enableEditMode();
-    // } else {
-      // enableEditMode(); // If not in edit or delete mode, enter edit mode
-    // }
+  // if (editingMode) {
+  //   exitEditMode(); // If already in edit mode, exit edit mode
+  // } else if (deletingMode) {
+  //   // exitDeleteMode(); // If in delete mode, exit delete mode
+  //   enableEditMode();
+  // } else {
+  // enableEditMode(); // If not in edit or delete mode, enter edit mode
+  // }
   // });
 
   // deleteHabitsButton.addEventListener("click", () => {
-    // if (deletingMode) {
-    //   // exitEditMode(); // If already in edit mode, exit edit mode
-    //   exitDeleteMode();
-    // } else if (editingMode) {
-    //   enableDeleteMode();
-    // } else {
-      // enableDeleteMode(); // If not in edit or delete mode, enter delete mode
-    // }
+  // if (deletingMode) {
+  //   // exitEditMode(); // If already in edit mode, exit edit mode
+  //   exitDeleteMode();
+  // } else if (editingMode) {
+  //   enableDeleteMode();
+  // } else {
+  // enableDeleteMode(); // If not in edit or delete mode, enter delete mode
+  // }
   // });
 
   addHabitButton.addEventListener("click", () => {
@@ -69,18 +71,21 @@ async function fetchHabits() {
 
     const headers = {
       //"Authorization": `Bearer ${token}`,
-      "Content-Type": "application/json"
+      "Content-Type": "application/json",
     };
 
     const response = await fetch("/habits", {
       method: "GET",
-      credentials: 'include'  // Include cookies with the request
+      credentials: "include", // Include cookies with the request
     });
 
     if (response.ok) {
       const habits = await response.json();
       const habitList = document.getElementById("habit-list");
       habitList.innerHTML = "";
+
+      const emptyHabitsText = document.getElementById("empty-habits-text");
+      emptyHabitsText.style.display = habits.length === 0  ? "block" : "none";
 
       habits.forEach((habit) => {
         const habitItem = document.createElement("li");
@@ -198,24 +203,24 @@ async function trackHabit(habitId) {
   //     deleteHabit(habitId); // Call the deleteHabit function
   //   }
   // } else {
-    console.log("CHANGE STATUS");
-    // Original trackHabit logic for tracking status
+  console.log("CHANGE STATUS");
+  // Original trackHabit logic for tracking status
 
-    const response = await fetch(`/habit/mark_done/${habitId}`, {
-      method: "POST",
-    });
+  const response = await fetch(`/habit/mark_done/${habitId}`, {
+    method: "POST",
+  });
 
-    if (response.ok) {
-      const habitBox = document.querySelector(
-        `.habit-box[data-habit-id="${habitId}"]`
-      );
+  if (response.ok) {
+    const habitBox = document.querySelector(
+      `.habit-box[data-habit-id="${habitId}"]`
+    );
 
-      if (habitBox) {
-        habitBox.classList.add("done"); // Add the "done" class
-      }
-    } else {
-      // Handle track habit error
+    if (habitBox) {
+      habitBox.classList.add("done"); // Add the "done" class
     }
+  } else {
+    // Handle track habit error
+  }
   // }
 }
 
@@ -298,7 +303,6 @@ async function handleAddHabit(event) {
         const errorData = await response.json();
         alert(errorData.message); // Display the validation message from the backend
       }
-
     } catch (error) {
       console.error("Error adding habit:", error);
       const errorContainer = document.createElement("p");
@@ -339,23 +343,22 @@ async function handleAddHabit(event) {
 }
 
 //document.addEventListener("DOMContentLoaded", () => {
-  //const token = localStorage.getItem("token");
+//const token = localStorage.getItem("token");
 
-  //if (token) {
-    // Attach the token to the headers of authenticated requests
-    //const headers = {
-      //Authorization: `Bearer ${token}`,
-    //};
+//if (token) {
+// Attach the token to the headers of authenticated requests
+//const headers = {
+//Authorization: `Bearer ${token}`,
+//};
 
-    // TO DO: QUESTION: Do I have to do something here for each action? fetch habits, add habits, etc.?
-    // Fetch user-specific data using the token
-    // ...
-  //} else {
-    // Redirect to the login page if the token is not present
-    //window.location.href = "/login";
-  //}
+// TO DO: QUESTION: Do I have to do something here for each action? fetch habits, add habits, etc.?
+// Fetch user-specific data using the token
+// ...
+//} else {
+// Redirect to the login page if the token is not present
+//window.location.href = "/login";
+//}
 //});
-
 
 const logoutButton = document.getElementById("logout");
 
