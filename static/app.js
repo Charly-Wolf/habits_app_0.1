@@ -74,6 +74,10 @@ function renderHabitListPage() {
   fetchHabits();
 }
 
+async function toggleDeleteButton(habits){
+  deleteHabitsButton.style.display = habits.length === 0 || habits.every(habit => habit.status)? "none" : "flex"; 
+}
+
 async function fetchHabits() {
   try {
     //const token = localStorage.getItem("token");
@@ -93,7 +97,8 @@ async function fetchHabits() {
       const habitList = document.getElementById("habit-list");
       habitList.innerHTML = "";
 
-      deleteHabitsButton.style.display = habits.length === 0 ? "none" : "flex";
+      toggleDeleteButton(habits);    
+
       const emptyHabitsText = document.getElementById("empty-habits-text");
       emptyHabitsText.style.display = habits.length === 0 ? "block" : "none";
 
@@ -247,6 +252,7 @@ async function trackHabit(habitId) {
       // Handle track habit error
     }
   }
+  await fetchHabits()
 }
 
 // Function to fetch habit by ID
