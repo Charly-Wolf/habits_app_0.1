@@ -12,20 +12,27 @@
   <body>
     <div class="container">
       <h1>Login</h1>
-      <p style="font-weight: bold; font-size: larger">
-        This is a Habit Builder App ✅
-      </p>
-      <p style="font-weight: bold; font-size: larger">
-        That means you can add habits and mark them as done by tapping on them
-        😁
-      </p>
-      <br />
+
       <form id="login-form">
         <input type="text" id="username" placeholder="Username" required />
         <input type="password" id="password" placeholder="Password" required />
         <button type="submit">Login</button>
       </form>
+
       <div id="error-message" class="error-message"></div>
+
+      <br />
+      <p style="font-weight: bold; font-size: larger">
+        This is a Habit Builder App ✅
+      </p>
+      <br />
+      <p style="font-weight: bold; font-size: larger">
+        That means you can add habits and mark them as done by tapping on them
+        😁
+      </p>
+      <br />
+      <br />
+
       <p>Don't have an account? <a href="/register">Register here</a></p>
     </div>
     <script src="{{ url_for('static', filename='login.js') }}"></script>
