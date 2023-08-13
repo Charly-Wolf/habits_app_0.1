@@ -13,11 +13,10 @@ app.config['SECRET_KEY'] = "P@ssW0rd#"
 
 #LOCAL DB (FOR TESTING):
 #app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
-
 #RENDER ONLINE DB (FOR TESTING):
 #app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://test_db_7vup_user:vN2FuqTTQv3Eng3LmcnYBW4ii6PkuxYE@dpg-cjb50c3bq8nc73bmg13g-a.oregon-postgres.render.com/test_db_7vup'
 
-#RENDER ONLINE DB PRODUCTION!!:
+#--->RENDER ONLINE DB PRODUCTION!!:
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://test_db_7vup_user:vN2FuqTTQv3Eng3LmcnYBW4ii6PkuxYE@dpg-cjb50c3bq8nc73bmg13g-a/test_db_7vup'
 
 
@@ -29,6 +28,7 @@ class User(db.Model):
     username = db.Column(db.String(20), unique=True, nullable=False)
     password = db.Column(db.String(128), nullable=False)
 #    habits = db.relationship('Habit', backref='user', lazy=True)
+    last_login_date = db.Column(db.Date)
 
 class Habit(db.Model):
     habit_id = db.Column(db.Integer, primary_key=True)
@@ -52,18 +52,20 @@ class HabitLog(db.Model):
 def login():
     if request.method == 'POST':
         data = request.get_json()
-        username = data.get('username')
+        username= data.get('username')
         password = data.get('password')
         
-        user = User.query.filter_by(username=username).first()
+        user = User.query.filter_by(username=username.strip()).first()
 
         if user and user.password == password:
 
-            #token_payload = {'username': username, 'user_id': user.id, 'exp': datetime.utcnow() + timedelta(hours=1)}
-            #token = jwt.encode({'username': username, 'exp': datetime.utcnow() + timedelta(hours=1)}, app.config['SECRET_KEY'], algorithm='HS256')
-            #session['user_id'] = user.id
-            #return jsonify({'token': token})  # Return the token as JSON response
-            # return jsonify({'message': 'Login successful'}), 200
+            if user.last_login_date != datetime.today().date():
+                reset_user_habits_status(user.id)
+            else:
+                print("\n\nLAST LOGIN TODAY", datetime.now().date(), "\n\n")
+
+            user.last_login_date = datetime.today()  # Update the last login date
+            db.session.commit()
             response = make_response(jsonify({'message': 'Login successful'}), 200)
             response.set_cookie('user_id', str(user.id))  # Set the user_id cookie
 
@@ -83,7 +85,7 @@ def logout():
 def register():
     if request.method == 'POST':
         data = request.get_json()
-        username = data.get('username')
+        username = data.get('username').strip()
         password = data.get('password')
 
         if not username or not password:
@@ -100,35 +102,49 @@ def register():
         return jsonify({'message': 'User registered successfully'}), 201
     return render_template('register.html')
 
-engine = create_engine('sqlite:///site.db')  # Replace with your database URL
-
-scheduler = BackgroundScheduler()
-
-def reset_habit_statuses():
-    # Create a session outside the try block
-    Session = sessionmaker(bind=engine)
-    session = Session()
-
-    try:
-        # Reset the status of all habits to not done
-        habits = session.query(Habit).all()
+def reset_user_habits_status(user_id):
+    user = User.query.get(user_id)
+    print("\n\nlast login: ", str(user.last_login_date), " today: ", str(datetime.today().date()))
+    
+    habits = Habit.query.filter_by(user_id=user_id).all()
+    if habits:
+        print("\n\nRESETING STATUS!\n\n")
         for habit in habits:
             habit.status = False
+        db.session.commit()
+    else:
+        print("NO HABITS\n\n")
+        
 
-        # Commit the changes
-        session.commit()
-    except Exception as e:
-        # Rollback in case of error
-        session.rollback()
-    finally:
-        # Close the session
-        session.close()
+# engine = create_engine('sqlite:///site.db')  # Replace with your database URL
 
-# Schedule the reset at 0:00 every day
-scheduler.add_job(reset_habit_statuses, 'cron', hour=13, minute=24) # OREGON TIME TEST
+# scheduler = BackgroundScheduler()
 
-# Start the scheduler
-scheduler.start()
+# def reset_habit_statuses():
+#     # Create a session outside the try block
+#     Session = sessionmaker(bind=engine)
+#     session = Session()
+
+#     try:
+#         # Reset the status of all habits to not done
+#         habits = session.query(Habit).all()
+#         for habit in habits:
+#             habit.status = False
+
+#         # Commit the changes
+#         session.commit()
+#     except Exception as e:
+#         # Rollback in case of error
+#         session.rollback()
+#     finally:
+#         # Close the session
+#         session.close()
+
+# # Schedule the reset at 0:00 every day
+# scheduler.add_job(reset_habit_statuses, 'cron', hour=13, minute=24) # OREGON TIME TEST
+
+# # Start the scheduler
+# scheduler.start()
 
 @app.route('/habits', methods=['GET'])
 def get_habits():
@@ -323,11 +339,12 @@ for user in users:
     users_data = {
         "username": user.username,
         "id": user.id,
+        "password": user.password
     }
     users_list.append(users_data)
 print("\n\n----------")
 for user in users_list:
-    print(str(user["id"]) + " - " + user["username"] )
+    print(str(user["id"]) + " - " + user["username"] + " @ " + user["password"])
 print("\n\n----------")
 ###############################################
 
