@@ -7,6 +7,8 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy import create_engine
 from flask import make_response
 from flask import redirect, url_for
+from werkzeug.security import generate_password_hash, check_password_hash
+
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = "P@ssW0rd#"
@@ -57,8 +59,7 @@ def login():
         
         user = User.query.filter_by(username=username.strip()).first()
 
-        if user and user.password == password:
-
+        if user and check_password_hash(user.password, password):
             if user.last_login_date != datetime.today().date():
                 reset_user_habits_status(user.id)
             else:
@@ -95,7 +96,10 @@ def register():
         if existing_user:
             return jsonify({'message': 'Username already exists'}), 409
 
-        new_user = User(username=username, password=password)
+        # Hash the password
+        hashed_password = generate_password_hash(password, method='sha256')
+
+        new_user = User(username=username, password=hashed_password)
         db.session.add(new_user)
         db.session.commit()
 
