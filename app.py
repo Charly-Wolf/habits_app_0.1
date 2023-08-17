@@ -4,11 +4,10 @@ from flask_cors import CORS
 from datetime import datetime, timedelta
 from apscheduler.schedulers.background import BackgroundScheduler
 from sqlalchemy.orm import sessionmaker
-from sqlalchemy import create_engine
+from sqlalchemy import func
 from flask import make_response
 from flask import redirect, url_for
 from werkzeug.security import generate_password_hash, check_password_hash
-
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = "P@ssW0rd#"
@@ -20,7 +19,6 @@ app.config['SECRET_KEY'] = "P@ssW0rd#"
 
 #--->RENDER ONLINE DB PRODUCTION!!:
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://test_db_7vup_user:vN2FuqTTQv3Eng3LmcnYBW4ii6PkuxYE@dpg-cjb50c3bq8nc73bmg13g-a/test_db_7vup'
-
 
 db = SQLAlchemy(app)
 CORS(app)  # Enable CORS for all routes
@@ -120,36 +118,6 @@ def reset_user_habits_status(user_id):
         print("NO HABITS\n\n")
         
 
-# engine = create_engine('sqlite:///site.db')  # Replace with your database URL
-
-# scheduler = BackgroundScheduler()
-
-# def reset_habit_statuses():
-#     # Create a session outside the try block
-#     Session = sessionmaker(bind=engine)
-#     session = Session()
-
-#     try:
-#         # Reset the status of all habits to not done
-#         habits = session.query(Habit).all()
-#         for habit in habits:
-#             habit.status = False
-
-#         # Commit the changes
-#         session.commit()
-#     except Exception as e:
-#         # Rollback in case of error
-#         session.rollback()
-#     finally:
-#         # Close the session
-#         session.close()
-
-# # Schedule the reset at 0:00 every day
-# scheduler.add_job(reset_habit_statuses, 'cron', hour=13, minute=24) # OREGON TIME TEST
-
-# # Start the scheduler
-# scheduler.start()
-
 @app.route('/habits', methods=['GET'])
 def get_habits():
 
@@ -158,7 +126,7 @@ def get_habits():
         return jsonify({'message': 'User not logged in'}), 401
 
 
-    habits = Habit.query.filter_by(user_id=user_id).order_by(Habit.name).all()  # Fetch user's habits ordered by name
+    habits = Habit.query.filter_by(user_id=user_id).order_by(func.lower(Habit.name)).all()  # Fetch user's habits ordered by name
     habit_list = []
 
     for habit in habits:
@@ -310,6 +278,7 @@ def toggle_habit_done(habit_id):
 @app.route('/habit/update_name/<int:habit_id>', methods=['PUT'])
 def update_habit_name(habit_id):
     habit = Habit.query.get_or_404(habit_id)
+    print("\nHABIT TO UPDATE: ", habit_id, " - ", habit.name)
     
     try:
         data = request.get_json()
