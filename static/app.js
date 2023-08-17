@@ -46,6 +46,7 @@ editHabitsButton.addEventListener("click", () => {
 backToHabitsListButton.addEventListener("click", backtohabits);
 
 function renderHabitListPage() {
+  backToHabitsListButton.style.display = "none"; // TO DO: clean this code, it is a mess!!
   appContainer.innerHTML = `
   <h2 class="habit-title">
     <span class="today-date"></span>
@@ -328,7 +329,6 @@ function renderAddHabitForm() {
 }
 
 async function backtohabits() {
-  backToHabitsListButton.style.display = "flex";
   deleteHabitsButton.style.display = "flex";
   editHabitsButton.style.display = "flex";
   addHabitButton.style.display = "flex";
