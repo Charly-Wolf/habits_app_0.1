@@ -48,10 +48,6 @@ backToHabitsListButton.addEventListener("click", backtohabits);
 function renderHabitListPage() {
   backToHabitsListButton.style.display = "none"; // TO DO: clean this code, it is a mess!!
   appContainer.innerHTML = `
-  <h2 class="habit-title">
-    <span class="today-date"></span>
-    <span class="habit-subtitle">Your Habits</span>
-  </h2>
   <h2 id="empty-habits-text">No habits... add one to start 🤓<br><br>For example: "Workout 🏋🏻‍♂️" or "Practice Japanese"</h2>
   <ul id="habit-list">
       
@@ -67,7 +63,7 @@ function renderHabitListPage() {
     month: "2-digit",
     day: "2-digit",
   });
-  todayDateSpan.textContent = formattedDate;
+  // todayDateSpan.textContent = formattedDate;
 
   fetchHabits();
 }
@@ -177,8 +173,8 @@ function enableEditMode() {
   appContainer.classList.add("edit-mode"); // Add edit mode class
 
   // Update the title text to indicate editing mode
-  const habitTitle = document.querySelector(".habit-subtitle");
-  habitTitle.textContent = "Your Habits - EDITING MODE";
+  // const habitTitle = document.querySelector(".habit-subtitle");
+  // habitTitle.textContent = "Your Habits - EDITING MODE";
   const habitBoxes = document.querySelectorAll(".habit-box");
   habitBoxes.forEach((habitBox) => {
     if (!habitBox.classList.contains("done")) {
@@ -193,7 +189,7 @@ function enableDeleteMode() {
 
   // appContainer.classList.add("delete-mode");
   // document.querySelector(".container").style.backgroundColor = "#bbb";
-  const habitTitle = document.querySelector(".habit-subtitle");
+  // const habitTitle = document.querySelector(".habit-subtitle");
 
   const habitBoxes = document.querySelectorAll(".habit-box");
   habitBoxes.forEach((habitBox) => {
@@ -202,7 +198,7 @@ function enableDeleteMode() {
     }
   });
 
-  habitTitle.textContent = "Your Habits - DELETE MODE";
+  // habitTitle.textContent = "Your Habits - DELETE MODE";
 }
 
 // // Add this function to exit delete mode
@@ -212,8 +208,8 @@ function exitDeleteMode() {
   // appContainer.classList.remove("delete-mode");
   // document.querySelector(".container").style.backgroundColor = "#fff";
 
-  const habitTitle = document.querySelector(".habit-subtitle");
-  habitTitle.textContent = "Your Habits";
+  // const habitTitle = document.querySelector(".habit-subtitle");
+  // habitTitle.textContent = "Your Habits";
 
   const habitBoxes = document.querySelectorAll(".habit-box");
   habitBoxes.forEach((habitBox) => {
@@ -231,8 +227,8 @@ function exitEditMode() {
     habitBox.classList.remove("edit-modus");
   });
   // Reset the title text to normal
-  const habitTitle = document.querySelector(".habit-subtitle");
-  habitTitle.textContent = "Your Habits";
+  // const habitTitle = document.querySelector(".habit-subtitle");
+  // habitTitle.textContent = "Your Habits";
 }
 
 async function trackHabit(habitId) {
@@ -365,7 +361,7 @@ async function handleAddHabit(event) {
     } catch (error) {
       console.error("Error adding habit:", error);
       const errorContainer = document.createElement("p");
-      errorContainer.textContent = "Error adding habit. Please try again.";
+      // errorContainer.textContent = "Error adding habit. Please try again.";
       errorContainer.style.color = "red";
       appContainer.appendChild(errorContainer);
     }
@@ -395,7 +391,7 @@ async function handleAddHabit(event) {
   } catch (error) {
     console.error("Error adding habit:", error);
     const errorContainer = document.createElement("p");
-    errorContainer.textContent = "Error adding habit. Please try again.";
+    // errorContainer.textContent = "Error adding habit. Please try again.";
     errorContainer.style.color = "red";
     appContainer.appendChild(errorContainer);
   }
