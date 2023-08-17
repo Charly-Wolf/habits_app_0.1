@@ -126,7 +126,10 @@ def get_habits():
         return jsonify({'message': 'User not logged in'}), 401
 
 
-    habits = Habit.query.filter_by(user_id=user_id).order_by(func.lower(Habit.name)).all()  # Fetch user's habits ordered by name
+    habits = Habit.query.filter_by(user_id=user_id).order_by(
+        Habit.status,
+        func.lower(Habit.name) 
+        ).all()  # Fetch user's habits ordered by name
     habit_list = []
 
     for habit in habits:
