@@ -179,7 +179,12 @@ function enableEditMode() {
   // Update the title text to indicate editing mode
   const habitTitle = document.querySelector(".habit-subtitle");
   habitTitle.textContent = "Your Habits - EDITING MODE";
-  document.querySelector(".container").style.backgroundColor = "#d1d1d1";
+  const habitBoxes = document.querySelectorAll(".habit-box");
+  habitBoxes.forEach((habitBox) => {
+    if (!habitBox.classList.contains("done")) {
+      habitBox.classList.add("edit-modus");
+    }
+  });
 }
 
 function enableDeleteMode() {
@@ -221,7 +226,10 @@ function exitEditMode() {
 
   // deletingMode = false;
   appContainer.classList.remove("edit-mode"); // Remove edit mode class
-  document.querySelector(".container").style.backgroundColor = "#fff";
+  const habitBoxes = document.querySelectorAll(".habit-box");
+  habitBoxes.forEach((habitBox) => {
+    habitBox.classList.remove("edit-modus");
+  });
   // Reset the title text to normal
   const habitTitle = document.querySelector(".habit-subtitle");
   habitTitle.textContent = "Your Habits";
