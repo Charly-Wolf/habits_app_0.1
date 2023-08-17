@@ -29,6 +29,10 @@ header {
   z-index: 1000; /* Ensure the header appears above other content */
 }
 
+#back-to-habits {
+  display: none;
+}
+
 #empty-habits-text {
   display: none;
   margin: 10vh 10vw;
@@ -304,4 +308,3 @@ button:active {
     margin-top: 0; /* Add margin to the top of each box */
   }
 }
-

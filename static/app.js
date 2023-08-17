@@ -8,6 +8,7 @@ const currentDate = new Date();
 const editHabitsButton = document.getElementById("edit-button");
 const deleteHabitsButton = document.getElementById("delete-button");
 const addHabitButton = document.getElementById("add-button");
+const backToHabitsListButton = document.getElementById("back-to-habits");
 
 deleteHabitsButton.addEventListener("click", () => {
   if (deletingMode) {
@@ -19,13 +20,12 @@ deleteHabitsButton.addEventListener("click", () => {
   } else {
     enableDeleteMode(); // If not in edit or delete mode, enter delete mode
   }
-
-
 });
 
 addHabitButton.addEventListener("click", () => {
   exitEditMode(); // Exit edit mode
   exitDeleteMode(); // Exit delete mode
+  backToHabitsListButton.style.display = "flex";
   deleteHabitsButton.style.display = "none";
   editHabitsButton.style.display = "none";
   addHabitButton.style.display = "none";
@@ -42,6 +42,8 @@ editHabitsButton.addEventListener("click", () => {
     enableEditMode(); // If not in edit or delete mode, enter edit mode
   }
 });
+
+backToHabitsListButton.addEventListener("click", backtohabits);
 
 function renderHabitListPage() {
   appContainer.innerHTML = `
@@ -102,7 +104,8 @@ async function fetchHabits() {
 
       const addHabitButton2 = document.getElementById("add-button-2");
       addHabitButton2.addEventListener("click", () => {
-        // exitEditMode(); // Exit edit mode
+        backToHabitsListButton.style.display = "flex";
+        exitEditMode(); // Exit edit mode
         exitDeleteMode(); // Exit delete mode
         deleteHabitsButton.style.display = "none";
         addHabitButton.style.display = "none";
@@ -315,17 +318,17 @@ function renderAddHabitForm() {
             <input type="text" id="new-habit-name" placeholder="Habit Name">
             <button type="submit">Confirm new Habit</button>
         </form>
-        <button id="back-to-habits">Back to Habits</button>
     `;
 
   const addHabitForm = document.getElementById("add-habit-form");
   addHabitForm.addEventListener("submit", handleAddHabit);
 
-  const backToHabitsButton = document.getElementById("back-to-habits");
-  backToHabitsButton.addEventListener("click", backtohabits);
+  // const backToHabitsButton = document.getElementById("back-to-habits");
+  // backToHabitsButton.addEventListener("click", backtohabits);
 }
 
 async function backtohabits() {
+  backToHabitsListButton.style.display = "flex";
   deleteHabitsButton.style.display = "flex";
   editHabitsButton.style.display = "flex";
   addHabitButton.style.display = "flex";
