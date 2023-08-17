@@ -116,6 +116,7 @@ async function fetchHabits() {
       });
       addHabitButton2.style.display = habits.length === 0 ? "flex" : "none";
       addHabitButton.style.display = habits.length === 0 ? "none" : "flex";
+      editHabitsButton.style.display = habits.length === 0? "none" : "flex";
 
       habits.forEach((habit) => {
         const habitItem = document.createElement("li");
