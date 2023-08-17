@@ -76,7 +76,12 @@ header {
   transform: scale(0.95);
 }
 
+#app {
+  width: 100%;
+}
+
 main {
+  width: 100%;
   padding: 85px 0 60px; /* Add padding at the top to create space for the fixed header */
   border-top: 1px solid #eee;
   display: flex;
@@ -292,12 +297,10 @@ button:active {
 
   /* Adjust grid layout for habit boxes on smaller screens */
   #habit-list {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 35px; /* Gap between rows */
-    justify-items: center;
-    margin-top: 20px;
-    margin-bottom: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
   }
 
   .habit-box {
