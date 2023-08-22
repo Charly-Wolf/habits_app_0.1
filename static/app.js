@@ -112,7 +112,7 @@ async function fetchHabits() {
       });
       addHabitButton2.style.display = habits.length === 0 ? "flex" : "none";
       addHabitButton.style.display = habits.length === 0 ? "none" : "flex";
-      editHabitsButton.style.display = habits.length === 0? "none" : "flex";
+      editHabitsButton.style.display = habits.length === 0 ? "none" : "flex";
 
       habits.forEach((habit) => {
         const habitItem = document.createElement("li");
@@ -129,9 +129,9 @@ async function fetchHabits() {
         `;
 
         habitItem.addEventListener("click", () => {
-          if (!habitItem.classList.contains("done")) {
-            trackHabit(habit.habit_id);
-          }
+          // if (!habitItem.classList.contains("done")) {
+          trackHabit(habit.habit_id);
+          // }
         });
 
         habitList.appendChild(habitItem);
@@ -254,7 +254,6 @@ async function trackHabit(habitId) {
     }
     exitDeleteMode();
   } else {
-    console.log("CHANGE STATUS");
     // Original trackHabit logic for tracking status
 
     const response = await fetch(`/habit/mark_done/${habitId}`, {
@@ -267,7 +266,15 @@ async function trackHabit(habitId) {
       );
 
       if (habitBox) {
-        habitBox.classList.add("done"); // Add the "done" class
+        if (habitBox.classList.contains("done")) {
+          const confirmed = confirm("Unmark this habit?");
+          if (confirmed) {
+            habitBox.classList.remove("done");
+          }
+        } else {
+          habitBox.classList.add("done"); // Add the "done" class
+          console.log("Marked as done");
+        }
       }
     } else {
       // Handle track habit error
