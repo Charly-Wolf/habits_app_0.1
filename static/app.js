@@ -335,8 +335,9 @@ function renderAddHabitForm() {
   appContainer.innerHTML = `
         <h2>Add Habit</h2>
         <form id="add-habit-form">
-            <input type="text" id="new-habit-name" placeholder="Habit Name">
+            <input type="text" id="new-habit-name" placeholder="Habit Name" required>
             <button type="submit">Confirm new Habit</button>
+            <div id="error-message" class="error-message"></div>
         </form>
     `;
 
@@ -357,6 +358,7 @@ async function backtohabits() {
 async function handleAddHabit(event) {
   event.preventDefault();
   const habitName = document.getElementById("new-habit-name").value.trim(); // Trim to remove leading/trailing whitespace
+  const errorMessageDiv = document.getElementById("error-message");
 
   if (habitName === "") {
     try {
@@ -374,10 +376,8 @@ async function handleAddHabit(event) {
       }
     } catch (error) {
       console.error("Error adding habit:", error);
-      const errorContainer = document.createElement("p");
+      errorMessageDiv.textContent = error;
       // errorContainer.textContent = "Error adding habit. Please try again.";
-      errorContainer.style.color = "red";
-      appContainer.appendChild(errorContainer);
     }
     return; // Don't proceed if the habit name is empty
   }
@@ -404,10 +404,8 @@ async function handleAddHabit(event) {
     }
   } catch (error) {
     console.error("Error adding habit:", error);
-    const errorContainer = document.createElement("p");
+    errorMessageDiv.textContent = error;
     // errorContainer.textContent = "Error adding habit. Please try again.";
-    errorContainer.style.color = "red";
-    appContainer.appendChild(errorContainer);
   }
 }
 

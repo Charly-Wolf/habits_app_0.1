@@ -117,12 +117,15 @@ def reset_user_habits_status(user_id):
 
 @app.route('/habits', methods=['GET'])
 def get_habits():
-
     user_id = request.cookies.get('user_id')  # Get user ID from the cookie
     if user_id is None:
         return jsonify({'message': 'User not logged in'}), 401
 
+    habit_list = get_current_user_habits_in_a_dictionary(user_id)
 
+    return jsonify(habit_list)
+
+def get_current_user_habits_in_a_dictionary(user_id):
     habits = Habit.query.filter_by(user_id=user_id).order_by(
         Habit.status,
         func.lower(Habit.name) 
@@ -135,10 +138,9 @@ def get_habits():
             "name": habit.name,
             "status": habit.status
         }
-
         habit_list.append(habit_data)
 
-    return jsonify(habit_list)
+    return habit_list
 
 @app.route('/log_entries', methods=['GET'])
 def get_log_entries():
@@ -196,6 +198,14 @@ def add_habit():
 
         if not habit_name or not habit_name.strip():
             return jsonify({'message': 'Habit name cannot be empty!'}), 400
+
+        #Check if the user already has a habbit with that name
+        user_id = request.cookies.get('user_id')
+        user_habits = get_current_user_habits_in_a_dictionary(user_id)  # Call the function to get the list of habits
+
+        for user_habit in user_habits:
+            if habit_name == user_habit['name']:
+                return jsonify({'message': 'That habit already exists.'}), 400
 
         new_habit = Habit(user_id=user_id, name=habit_name)  # Associate habit with the user
 
