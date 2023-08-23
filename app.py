@@ -10,7 +10,7 @@ from flask import redirect, url_for
 from werkzeug.security import generate_password_hash, check_password_hash
 
 app = Flask(__name__)
-app.config['SECRET_KEY'] = "P@ssW0rd#"
+app.config['SECRET_KEY'] = "P@ssW0rd#" # WHAT DO I NEED THIS FOR??
 
 #LOCAL DB (FOR TESTING):
 #app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
@@ -204,7 +204,7 @@ def add_habit():
         user_habits = get_current_user_habits_in_a_dictionary(user_id)  # Call the function to get the list of habits
 
         for user_habit in user_habits:
-            if habit_name == user_habit['name']:
+            if habit_name.lower() == user_habit['name'].lower():
                 return jsonify({'message': 'That habit already exists.'}), 400
 
         new_habit = Habit(user_id=user_id, name=habit_name)  # Associate habit with the user
@@ -300,8 +300,16 @@ def update_habit_name(habit_id):
     
     try:
         data = request.get_json()
-        new_name = data.get('name')
-        
+        new_name = data.get('name').strip()
+
+        user_id = request.cookies.get('user_id')
+        user_habits = get_current_user_habits_in_a_dictionary(user_id)  # Call the function to get the list of habits
+
+        # Check if a habit already has that name
+        for user_habit in user_habits:
+            if new_name.lower() == user_habit['name'].lower():
+                return jsonify({'message': 'That habit already exists.'}), 400
+
         if not new_name or not new_name.strip():
             return jsonify({'message': 'New habit name cannot be empty!'}), 400
         

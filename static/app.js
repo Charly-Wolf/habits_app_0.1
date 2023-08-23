@@ -327,6 +327,7 @@ async function updateHabitName(habitId, newName) {
     }
   } catch (error) {
     console.error("Error updating habit name:", error);
+    alert(error);
     // Handle error
   }
 }
