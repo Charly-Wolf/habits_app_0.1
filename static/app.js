@@ -126,6 +126,14 @@ async function fetchHabits() {
 
         habitItem.innerHTML = `
           <span class="habit-name">${habit.name}</span>
+          <div class="habit-buttons">
+            <button class="delete-btn">
+                <i class="fa-solid fa-trash-can"></i>
+            </button>
+            <button class="edit-btn">
+                <i class="fas fa-pencil"></i>
+            </button>
+          </div>
         `;
 
         habitItem.addEventListener("click", () => {

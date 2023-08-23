@@ -93,6 +93,7 @@ main {
 
 .habit-name {
   user-select: none;
+  padding-left: 2em;
 }
 
 /* Style for habit boxes */
@@ -105,7 +106,7 @@ main {
 }
 
 /* Style for habit boxes */
-.habit-box {
+/* .habit-box {
   height: 100px;
   border-radius: 5px;
   width: 100%;
@@ -120,7 +121,46 @@ main {
   margin: 0 25px;
   padding: 2px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Adjust values as needed */
+/* }  */
+
+.habit-box {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 100px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  background-color: #fff;
+  cursor: pointer;
+  transition: background-color 0.3s, border-color 0.3s;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 2px;
 }
+
+.habit-box .habit-buttons {
+  display: flex;
+}
+
+.habit-box .habit-buttons button {
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: transparent;
+  color: #433764;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  transition: color 0.3s;
+  margin: 0;
+}
+
+.habit-box .habit-buttons button:hover {
+  color: #3498db;
+}
+
 /* Hover effect for completed habit boxes */
 .habit-box.done:hover {
   background-color: #92c492; /* Change to your desired color */
@@ -133,6 +173,7 @@ main {
 
 .habit-box:hover:not(.done)::before {
   content: "DONE?"; /* Replace with the desired text */
+  padding-left: 2em;
 }
 
 /* Hover effect for not completed habit boxes */
