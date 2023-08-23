@@ -85,14 +85,17 @@ def register():
         data = request.get_json()
         username = data.get('username').strip()
         password = data.get('password')
+        password2 = data.get('password2')
 
-        if not username or not password:
+        if not username or not password or not password2:
             return jsonify({'message': 'Username and password are required'}), 400
 
         existing_user = User.query.filter_by(username=username).first()
         if existing_user:
             return jsonify({'message': 'Username already exists'}), 409
 
+        if password != password2:
+            return jsonify({'message': 'Passwords must be the same'}), 400
         # Hash the password
         hashed_password = generate_password_hash(password, method='sha256')
 

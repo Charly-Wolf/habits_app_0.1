@@ -4,8 +4,9 @@ const errorMessageDiv = document.getElementById("error-message");
 registerForm.addEventListener("submit", async (event) => {
   event.preventDefault();
 
-  const username = document.getElementById("username").value;
-  const password = document.getElementById("password").value;
+  const username = document.getElementById("username_reg").value;
+  const password = document.getElementById("password_reg").value;
+  const password2 = document.getElementById("password2_reg").value;
 
   try {
     const response = await fetch("/register", {
@@ -13,7 +14,7 @@ registerForm.addEventListener("submit", async (event) => {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ username, password }),
+      body: JSON.stringify({ username, password, password2 }),
     });
 
     if (response.ok) {
@@ -29,5 +30,4 @@ registerForm.addEventListener("submit", async (event) => {
   }
 
   document.getElementById("password").value = "";
-
 });
