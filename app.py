@@ -59,8 +59,8 @@ def login():
         if user and check_password_hash(user.password, password):
             if user.last_login_date != datetime.today().date():
                 reset_user_habits_status(user.id)
-            else:
-                print("\n\nLAST LOGIN TODAY", datetime.now().date(), "\n\n")
+            #else:
+                #TODO
 
             user.last_login_date = datetime.today()  # Update the last login date
             db.session.commit()
@@ -105,16 +105,14 @@ def register():
 
 def reset_user_habits_status(user_id):
     user = User.query.get(user_id)
-    print("\n\nlast login: ", str(user.last_login_date), " today: ", str(datetime.today().date()))
     
     habits = Habit.query.filter_by(user_id=user_id).all()
     if habits:
-        print("\n\nRESETING STATUS!\n\n")
         for habit in habits:
             habit.status = False
         db.session.commit()
-    else:
-        print("NO HABITS\n\n")
+    # else:
+        #TODO
         
 
 @app.route('/habits', methods=['GET'])
@@ -158,20 +156,6 @@ def get_log_entries():
         log_entry_list.append(log_entry_data)
     
     return jsonify(log_entry_list)
-
-# @app.route('/log_entries/<int:log_id>', methods=['DELETE'])
-# def delete_log_entry(log_id):
-#     # TO DO!! --- DOING IN PROGRESS
-#     log_entry_to_delete = HabitLog.query.get_or_404(log_id)
-    
-#     try:
-#         db.session.delete(log_entry_to_delete)
-#         db.session.commit()
-#         return jsonify({'message': 'Habit log deleted successfully'}), 200
-#     except Exception as e:
-#         return jsonify({'message': 'An error occurred while deleting the log.'}), 500
-
-
 
 @app.route('/habit/<int:habit_id>', methods=['DELETE'])
 def delete_habit(habit_id):
@@ -261,28 +245,6 @@ def filter_logs_by_date(logs, target_date):
             return log
     return None
 
-# @app.route('/track_habit/<int:habit_id>', methods=['PUT'])
-# def track_habit(habit_id):
-#     habit = Habit.query.get_or_404(habit_id)
-
-
-
-#     # Check if the habit status is changing
-#     if habit.status:
-#         new_log = HabitLog(habit_id=habit.habit_id, log_date=datetime.now(), status=True)
-#         db.session.add(new_log)
-#     # else:
-#     #     # Delete the corresponding log entry if habit is marked as not done
-#     #     log_entry = HabitLog.query.filter_by(habit_id=habit.habit_id, log_date=datetime.utcnow()).first()
-#     #     if log_entry:
-#     #         db.session.delete(log_entry)
-
-#     db.session.commit()
-
-#     return jsonify({'message': 'Habit tracked successfully'}), 200
-
-
-
 @app.route('/habit/mark_done/<int:habit_id>', methods=['POST'])
 def mark_habit_done(habit_id):
     habit = Habit.query.get(habit_id)
@@ -310,10 +272,6 @@ def unmark_habit_done(habit_id):
         try:
             habit_log_to_delete = filter_logs_by_date(filter_logs_by_habit_id(habit_id),today_date)
 
-            print("\n\n")
-            print(f"HABIT log to unmark {habit_log_to_delete.log_id}")
-            print("\n\n")
-
             db.session.delete(habit_log_to_delete)
 
             habit.status = not habit.status
@@ -329,7 +287,6 @@ def unmark_habit_done(habit_id):
 @app.route('/habit/update_name/<int:habit_id>', methods=['PUT'])
 def update_habit_name(habit_id):
     habit = Habit.query.get_or_404(habit_id)
-    print("\nHABIT TO UPDATE: ", habit_id, " - ", habit.name)
     
     try:
         data = request.get_json()
@@ -355,31 +312,6 @@ def index():
 
 
 db.create_all() 
-
-#DEBUG###################################
-users = User.query.all()  # Fetch users
-users_list = []
-for user in users:
-    users_data = {
-        "username": user.username,
-        "id": user.id,
-        "password": user.password
-    }
-    users_list.append(users_data)
-print("\n\n----------")
-for user in users_list:
-    print(str(user["id"]) + " - " + user["username"] + " @ " + user["password"])
-print("\n\n----------")
-
-
-# habit_log = HabitLog.query.filter_by(habit_id = 5).order_by(HabitLog.log_date.desc()).first()
-# habit_log = HabitLog.query.filter(func.DATE(HabitLog.log_date) == datetime.today().date(), HabitLog.habit_id == 5).one()
-# # habit_log = HabitLog(log_id = 1, habit_id = 5, log_date = datetime.now())
-# print(f"\n\n+++++HABIT LOG OF HABIT 5 Today ({datetime.now().date() }) ", str(habit_log.log_date.date()))
-# print(f"\n\n+++++HABIT LOG OF HABIT 5 Today ({datetime.now().date() }) ", str(habit_log.log_date.date()))
-# print(f"Is today ({datetime.now().date()}) the same as log date ({habit_log.log_date.date()})?")
-# print("Yes" if datetime.now().date() == habit_log.log_date.date() else "No")
-###############################################
 
 if __name__ == '__main__':
     app.run

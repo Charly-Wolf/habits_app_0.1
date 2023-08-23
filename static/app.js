@@ -411,24 +411,6 @@ async function handleAddHabit(event) {
   }
 }
 
-//document.addEventListener("DOMContentLoaded", () => {
-//const token = localStorage.getItem("token");
-
-//if (token) {
-// Attach the token to the headers of authenticated requests
-//const headers = {
-//Authorization: `Bearer ${token}`,
-//};
-
-// TO DO: QUESTION: Do I have to do something here for each action? fetch habits, add habits, etc.?
-// Fetch user-specific data using the token
-// ...
-//} else {
-// Redirect to the login page if the token is not present
-//window.location.href = "/login";
-//}
-//});
-
 const logoutButton = document.getElementById("logout");
 
 logoutButton.addEventListener("click", async () => {
