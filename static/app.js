@@ -255,29 +255,32 @@ async function trackHabit(habitId) {
     exitDeleteMode();
   } else {
     // Original trackHabit logic for tracking status
-
-    const response = await fetch(`/habit/mark_done/${habitId}`, {
-      method: "POST",
-    });
-
-    if (response.ok) {
-      const habitBox = document.querySelector(
-        `.habit-box[data-habit-id="${habitId}"]`
-      );
-
-      if (habitBox) {
-        if (habitBox.classList.contains("done")) {
-          const confirmed = confirm("Unmark this habit?");
-          if (confirmed) {
-            habitBox.classList.remove("done");
-          }
-        } else {
+    const habitBox = document.querySelector(
+      `.habit-box[data-habit-id="${habitId}"]`
+    );
+    if (habitBox) {
+      if (!habitBox.classList.contains("done")) {
+        const response = await fetch(`/habit/mark_done/${habitId}`, {
+          method: "POST",
+        });
+        if (response.ok) {
           habitBox.classList.add("done"); // Add the "done" class
-          console.log("Marked as done");
+        } else {
+          // TODO: Handle track habit error
+        }
+      } else {
+        const confirmed = confirm("Unmark this habit?");
+        if (confirmed) {
+          const response = await fetch(`/habit/mark_undone/${habitId}`, {
+            method: "PUT",
+          });
+          if (response.ok) {
+            habitBox.classList.remove("done");
+          } else {
+            // TODO: Handle track habit error
+          }
         }
       }
-    } else {
-      // Handle track habit error
     }
   }
   await fetchHabits();
@@ -302,6 +305,10 @@ async function fetchHabitById(habitId) {
     // Handle error
     return null;
   }
+}
+
+async function fetchLogByUserId(userId) {
+  //TO DO
 }
 
 async function updateHabitName(habitId, newName) {

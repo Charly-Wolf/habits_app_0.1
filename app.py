@@ -14,6 +14,7 @@ app.config['SECRET_KEY'] = "P@ssW0rd#"
 
 #LOCAL DB (FOR TESTING):
 #app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
+
 #RENDER ONLINE DB (FOR TESTING):
 #app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://test_db_7vup_user:vN2FuqTTQv3Eng3LmcnYBW4ii6PkuxYE@dpg-cjb50c3bq8nc73bmg13g-a.oregon-postgres.render.com/test_db_7vup'
 
@@ -42,9 +43,7 @@ class Habit(db.Model):
 class HabitLog(db.Model):
     log_id = db.Column(db.Integer, primary_key=True)
     habit_id = db.Column(db.Integer, db.ForeignKey('habit.habit_id'), nullable=False)
-    #user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False) #user is implied in the habit object with its user_id attribute
     log_date = db.Column(db.DateTime, nullable=False)
-    # status = db.Column(db.Boolean, default=False)
 
 
 
@@ -160,6 +159,20 @@ def get_log_entries():
     
     return jsonify(log_entry_list)
 
+# @app.route('/log_entries/<int:log_id>', methods=['DELETE'])
+# def delete_log_entry(log_id):
+#     # TO DO!! --- DOING IN PROGRESS
+#     log_entry_to_delete = HabitLog.query.get_or_404(log_id)
+    
+#     try:
+#         db.session.delete(log_entry_to_delete)
+#         db.session.commit()
+#         return jsonify({'message': 'Habit log deleted successfully'}), 200
+#     except Exception as e:
+#         return jsonify({'message': 'An error occurred while deleting the log.'}), 500
+
+
+
 @app.route('/habit/<int:habit_id>', methods=['DELETE'])
 def delete_habit(habit_id):
     habit = Habit.query.get_or_404(habit_id)
@@ -236,30 +249,42 @@ def get_log_entry(log_id):
         return jsonify(log_entry_data)
     else:
         return jsonify({'message': 'Log entry not found'}), 404
+    
+def filter_logs_by_habit_id(target_habit_id):
+    log_entries = HabitLog.query.filter_by(habit_id=target_habit_id).all()
+    return log_entries
+
+def filter_logs_by_date(logs, target_date):
+    for log in logs:
+        log_date = log.log_date.date()
+        if log_date == target_date:
+            return log
+    return None
+
+# @app.route('/track_habit/<int:habit_id>', methods=['PUT'])
+# def track_habit(habit_id):
+#     habit = Habit.query.get_or_404(habit_id)
 
 
-@app.route('/track_habit/<int:habit_id>', methods=['PUT'])
-def track_habit(habit_id):
-    habit = Habit.query.get_or_404(habit_id)
 
-    # Check if the habit status is changing
-    if habit.status:
-        new_log = HabitLog(habit_id=habit.habit_id, log_date=datetime.now(), status=True)
-        db.session.add(new_log)
-    # else:
-    #     # Delete the corresponding log entry if habit is marked as not done
-    #     log_entry = HabitLog.query.filter_by(habit_id=habit.habit_id, log_date=datetime.utcnow()).first()
-    #     if log_entry:
-    #         db.session.delete(log_entry)
+#     # Check if the habit status is changing
+#     if habit.status:
+#         new_log = HabitLog(habit_id=habit.habit_id, log_date=datetime.now(), status=True)
+#         db.session.add(new_log)
+#     # else:
+#     #     # Delete the corresponding log entry if habit is marked as not done
+#     #     log_entry = HabitLog.query.filter_by(habit_id=habit.habit_id, log_date=datetime.utcnow()).first()
+#     #     if log_entry:
+#     #         db.session.delete(log_entry)
 
-    db.session.commit()
+#     db.session.commit()
 
-    return jsonify({'message': 'Habit tracked successfully'}), 200
+#     return jsonify({'message': 'Habit tracked successfully'}), 200
 
 
 
 @app.route('/habit/mark_done/<int:habit_id>', methods=['POST'])
-def toggle_habit_done(habit_id):
+def mark_habit_done(habit_id):
     habit = Habit.query.get(habit_id)
 
     if habit:
@@ -270,13 +295,36 @@ def toggle_habit_done(habit_id):
             habit.status = not habit.status
             db.session.commit()
 
-            return jsonify({'message': 'Habit status toggled successfully'}), 200
+            return jsonify({'message': 'Habit status toggled and log created successfully'}), 200
         except Exception as e:
             return jsonify({'message': 'An error occurred while toggling habit status.'}), 500
     else:
         return jsonify({'message': 'Habit not found'}), 404
 
+@app.route('/habit/mark_undone/<int:habit_id>', methods=['PUT'])
+def unmark_habit_done(habit_id):
+    habit = Habit.query.get(habit_id)
+    today_date = datetime.now().date()
 
+    if habit:
+        try:
+            habit_log_to_delete = filter_logs_by_date(filter_logs_by_habit_id(habit_id),today_date)
+
+            print("\n\n")
+            print(f"HABIT log to unmark {habit_log_to_delete.log_id}")
+            print("\n\n")
+
+            db.session.delete(habit_log_to_delete)
+
+            habit.status = not habit.status
+            db.session.commit()
+
+            return jsonify({'message': 'Habit status toggled and corresponding log deleted successfully'}), 200
+    
+        except Exception as e:
+            return jsonify({'message': f'No log found for the habit_id {habit_id} today ({today_date}).'}), 500  
+    else:
+        return jsonify({'message': 'Habit not found'}), 404
 
 @app.route('/habit/update_name/<int:habit_id>', methods=['PUT'])
 def update_habit_name(habit_id):
@@ -322,6 +370,15 @@ print("\n\n----------")
 for user in users_list:
     print(str(user["id"]) + " - " + user["username"] + " @ " + user["password"])
 print("\n\n----------")
+
+
+# habit_log = HabitLog.query.filter_by(habit_id = 5).order_by(HabitLog.log_date.desc()).first()
+# habit_log = HabitLog.query.filter(func.DATE(HabitLog.log_date) == datetime.today().date(), HabitLog.habit_id == 5).one()
+# # habit_log = HabitLog(log_id = 1, habit_id = 5, log_date = datetime.now())
+# print(f"\n\n+++++HABIT LOG OF HABIT 5 Today ({datetime.now().date() }) ", str(habit_log.log_date.date()))
+# print(f"\n\n+++++HABIT LOG OF HABIT 5 Today ({datetime.now().date() }) ", str(habit_log.log_date.date()))
+# print(f"Is today ({datetime.now().date()}) the same as log date ({habit_log.log_date.date()})?")
+# print("Yes" if datetime.now().date() == habit_log.log_date.date() else "No")
 ###############################################
 
 if __name__ == '__main__':
