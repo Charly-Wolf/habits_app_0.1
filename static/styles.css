@@ -155,10 +155,14 @@ main {
   font-size: 14px;
   transition: color 0.3s;
   margin: 0;
+  transform: scale(1); /* Default size */
+  transition: transform 0.3s;
 }
 
 .habit-box .habit-buttons button:hover {
   color: #3498db;
+  transform: scale(1.5); /* Adjust the scale factor as needed */
+  transition: transform 0.3s;
 }
 
 /* Hover effect for completed habit boxes */
@@ -167,18 +171,9 @@ main {
   border-color: #65a765; /* Change to your desired color */
 }
 
-.habit-box:not(.done):hover span {
-  display: none;
-}
-
-.habit-box:hover:not(.done)::before {
-  content: "DONE?"; /* Replace with the desired text */
-  padding-left: 2em;
-}
-
 /* Hover effect for not completed habit boxes */
 .habit-box:not(.done):hover {
-  background-color: #a8a2a2; /* Change to your desired color */
+  background-color: #dddddd; /* Change to your desired color */
   border-color: #999; /* Change to your desired color */
 }
 
