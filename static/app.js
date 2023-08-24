@@ -117,7 +117,7 @@ async function fetchHabits() {
       habits.forEach((habit) => {
         const habitItem = document.createElement("li");
         habitItem.className = "habit-box"; // Always assign the base class
-        
+
         // Set the data-habit-id attribute
         habitItem.setAttribute("data-habit-id", habit.habit_id);
 
@@ -138,7 +138,7 @@ async function fetchHabits() {
             </button>
           </div>
         `;
-        
+
         habitItem.addEventListener("click", () => {
           // if (!habitItem.classList.contains("done")) {
           // trackHabit(habit.habit_id);
@@ -147,24 +147,44 @@ async function fetchHabits() {
 
         habitList.appendChild(habitItem);
 
-        const checkButton = document.getElementById(`check-btn-id-${habit.habit_id}`);
-        const uncheckButton = document.getElementById(`uncheck-btn-id-${habit.habit_id}`);
-        const deleteButton = document.getElementById(`delete-btn-id-${habit.habit_id}`);
-        const editButton = document.getElementById(`edit-btn-id-${habit.habit_id}`);
-        if (habit.status) {        
-          habitItem.classList.add("done"); // Add "done" class if status is true 
+        const checkButton = document.getElementById(
+          `check-btn-id-${habit.habit_id}`
+        );
+        const uncheckButton = document.getElementById(
+          `uncheck-btn-id-${habit.habit_id}`
+        );
+        const deleteButton = document.getElementById(
+          `delete-btn-id-${habit.habit_id}`
+        );
+        const editButton = document.getElementById(
+          `edit-btn-id-${habit.habit_id}`
+        );
+        if (habit.status) {
+          habitItem.classList.add("done"); // Add "done" class if status is true
           checkButton.style.display = "none";
           uncheckButton.style.display = "flex";
           deleteButton.style.display = "none";
           editButton.style.display = "none";
-        }else {
+
+          uncheckButton.addEventListener("click", async () =>
+            unmarkHabitDone(habit)
+          );
+        } else {
+          habitItem.classList.remove("done");
           checkButton.style.display = "flex";
           uncheckButton.style.display = "none";
           deleteButton.style.display = "flex";
           editButton.style.display = "flex";
 
-          deleteButton.addEventListener("click", async () => deleteHabit(habit));
-          editButton.addEventListener("click", async () => updateHabitName(habit))
+          checkButton.addEventListener("click", async () =>
+            markHabitDone(habit)
+          );
+          deleteButton.addEventListener("click", async () =>
+            deleteHabit(habit)
+          );
+          editButton.addEventListener("click", async () =>
+            updateHabitName(habit)
+          );
         }
       });
     } else {
@@ -173,6 +193,23 @@ async function fetchHabits() {
   } catch (error) {
     console.error("Error fetching habits:", error);
     // Handle error
+  }
+}
+
+async function markHabitDone(habit) {
+  await fetch(`/habit/mark_done/${habit.habit_id}`, {
+    method: "POST",
+  });
+  await fetchHabits();
+}
+
+async function unmarkHabitDone(habit) {
+  const confirmed = confirm("Unmark this habit?");
+  if (confirmed) {
+    const response = await fetch(`/habit/mark_undone/${habit.habit_id}`, {
+      method: "PUT",
+    });
+    await fetchHabits();
   }
 }
 
@@ -191,7 +228,7 @@ async function deleteHabit(habit) {
         const errorData = await response.json(); // Assuming the server sends a JSON error response
         console.error("Delete failed:", errorData.message);
       }
-    } 
+    }
     // exitDeleteMode();
   } catch (error) {
     console.error("Error deleting habit:", error);
@@ -265,61 +302,61 @@ function exitEditMode() {
   // habitTitle.textContent = "Your Habits";
 }
 
-async function trackHabit(habitId) {
-  if (editingMode) {
-    // Handle editing logic here
-    const habitToEdit = await fetchHabitById(habitId); // Fetch the habit data
+// async function trackHabit(habitId) {
+//   if (editingMode) {
+//     // Handle editing logic here
+//     const habitToEdit = await fetchHabitById(habitId); // Fetch the habit data
 
-    if (habitToEdit) {
-      const newHabitName = prompt("Enter new habit name:", habitToEdit.name); // Populate the prompt with the current habit name
-      if (newHabitName !== null) {
-        await updateHabitName(habitId, newHabitName);
-        // Refresh the habit list after editing
-        fetchHabits();
-      }
-      exitEditMode();
-    }
-  } else if (deletingMode) {
-    // if (deletingMode) {
-    const confirmed = confirm("Are you sure you want to delete this habit?");
-    if (confirmed) {
-      // alert("DELETED");
-      deleteHabit(habitId); // Call the deleteHabit function
-    }
-    exitDeleteMode();
-  } else {
-    // Original trackHabit logic for tracking status
-    const habitBox = document.querySelector(
-      `.habit-box[data-habit-id="${habitId}"]`
-    );
-    if (habitBox) {
-      if (!habitBox.classList.contains("done")) {
-        const response = await fetch(`/habit/mark_done/${habitId}`, {
-          method: "POST",
-        });
-        if (response.ok) {
-          habitBox.classList.add("done"); // Add the "done" class
-          // const checkButton = document.getElementById(`check-btn-id-${habitId}`);
-        } else {
-          // TODO: Handle track habit error
-        }
-      } else {
-        const confirmed = confirm("Unmark this habit?");
-        if (confirmed) {
-          const response = await fetch(`/habit/mark_undone/${habitId}`, {
-            method: "PUT",
-          });
-          if (response.ok) {
-            habitBox.classList.remove("done");
-          } else {
-            // TODO: Handle track habit error
-          }
-        }
-      }
-    }
-  }
-  await fetchHabits();
-}
+//     if (habitToEdit) {
+//       const newHabitName = prompt("Enter new habit name:", habitToEdit.name); // Populate the prompt with the current habit name
+//       if (newHabitName !== null) {
+//         await updateHabitName(habitId, newHabitName);
+//         // Refresh the habit list after editing
+//         fetchHabits();
+//       }
+//       exitEditMode();
+//     }
+//   } else if (deletingMode) {
+//     // if (deletingMode) {
+//     const confirmed = confirm("Are you sure you want to delete this habit?");
+//     if (confirmed) {
+//       // alert("DELETED");
+//       deleteHabit(habitId); // Call the deleteHabit function
+//     }
+//     exitDeleteMode();
+//   } else {
+//     // Original trackHabit logic for tracking status
+//     const habitBox = document.querySelector(
+//       `.habit-box[data-habit-id="${habitId}"]`
+//     );
+//     if (habitBox) {
+//       if (!habitBox.classList.contains("done")) {
+//         const response = await fetch(`/habit/mark_done/${habitId}`, {
+//           method: "POST",
+//         });
+//         if (response.ok) {
+//           habitBox.classList.add("done"); // Add the "done" class
+//           // const checkButton = document.getElementById(`check-btn-id-${habitId}`);
+//         } else {
+//           // TODO: Handle track habit error
+//         }
+//       } else {
+//         const confirmed = confirm("Unmark this habit?");
+//         if (confirmed) {
+//           const response = await fetch(`/habit/mark_undone/${habitId}`, {
+//             method: "PUT",
+//           });
+//           if (response.ok) {
+//             habitBox.classList.remove("done");
+//           } else {
+//             // TODO: Handle track habit error
+//           }
+//         }
+//       }
+//     }
+//   }
+//   await fetchHabits();
+// }
 
 // Function to fetch habit by ID
 async function fetchHabitById(habitId) {
@@ -357,7 +394,7 @@ async function updateHabitName(habit) {
         },
         body: JSON.stringify({ name: newHabitName }),
       });
-  
+
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.message);
@@ -365,7 +402,6 @@ async function updateHabitName(habit) {
       // Refresh the habit list after editing
       fetchHabits();
     }
-
   } catch (error) {
     console.error("Error updating habit name:", error);
     alert(error);
