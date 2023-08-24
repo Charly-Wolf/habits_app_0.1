@@ -163,7 +163,8 @@ async function fetchHabits() {
           deleteButton.style.display = "flex";
           editButton.style.display = "flex";
 
-          deleteButton.addEventListener("click", () => deleteHabit(habit));
+          deleteButton.addEventListener("click", async () => deleteHabit(habit));
+          editButton.addEventListener("click", async () => updateHabitName(habit))
         }
       });
     } else {
@@ -345,20 +346,26 @@ async function fetchLogByUserId(userId) {
   //TO DO
 }
 
-async function updateHabitName(habitId, newName) {
+async function updateHabitName(habit) {
   try {
-    const response = await fetch(`/habit/update_name/${habitId}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ name: newName }),
-    });
-
-    if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(errorData.message);
+    const newHabitName = prompt("Enter new habit name:", habit.name); // Populate the prompt with the current habit name
+    if (newHabitName !== null) {
+      const response = await fetch(`/habit/update_name/${habit.habit_id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ name: newHabitName }),
+      });
+  
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message);
+      }
+      // Refresh the habit list after editing
+      fetchHabits();
     }
+
   } catch (error) {
     console.error("Error updating habit name:", error);
     alert(error);
