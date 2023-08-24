@@ -69,15 +69,6 @@ footer button {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-footer button:hover {
-  background-color: #0056b3;
-  transform: scale(1.05);
-}
-
-footer button:active {
-  transform: scale(0.95);
-}
-
 #app {
   width: 100%;
 }
@@ -159,34 +150,7 @@ main {
   transition: transform 0.3s;
 }
 
-.habit-box .habit-buttons button:hover {
-  color: #3498db;
-  transform: scale(1.5); /* Adjust the scale factor as needed */
-  transition: transform 0.3s;
-}
 
-/* Hover effect for completed habit boxes */
-.habit-box.done:hover {
-  background-color: #92c492; /* Change to your desired color */
-  border-color: #65a765; /* Change to your desired color */
-}
-
-/* Hover effect for not completed habit boxes */
-.habit-box:not(.done):hover {
-  background-color: #dddddd; /* Change to your desired color */
-  border-color: #999; /* Change to your desired color */
-}
-
-.habit-box span {
-  transform: scale(1); /* Default size */
-  transition: transform 0.3s;
-}
-
-/* Increase text size on hover */
-.habit-box:hover span {
-  transform: scale(1.2); /* Adjust the scale factor as needed */
-  transition: transform 0.3s;
-}
 
 /* Style for completed habit boxes */
 .habit-box.done {
@@ -218,22 +182,7 @@ button {
   transition: background-color 0.3s, transform 0.2s;
 }
 
-button:hover {
-  background-color: #0056b3;
-  transform: scale(1.05); /* Slightly scale up on hover */
-}
 
-button:active {
-  transform: scale(0.95); /* Slightly scale down on active */
-}
-
-#logout {
-  background-color: red;
-}
-
-#logout:hover {
-  background-color: rgb(114, 12, 12);
-}
 
 /* .habit-box.delete-modus:hover {
   background-color: #b43555;
@@ -368,5 +317,64 @@ button:active {
     padding: 5px; /* Adjust padding for habit boxes */
     font-size: 14px;
     margin-top: 0; /* Add margin to the top of each box */
+  }
+}
+
+/* Only for big screens */
+@media (min-width: 600px) { 
+
+  button:hover {
+    background-color: #0056b3;
+    transform: scale(1.05); /* Slightly scale up on hover */
+  }
+  
+  button:active {
+    transform: scale(0.95); /* Slightly scale down on active */
+  }
+  
+  #logout {
+    background-color: red;
+  }
+  
+  #logout:hover {
+    background-color: rgb(114, 12, 12);
+  }
+
+  footer button:hover {
+    background-color: #0056b3;
+    transform: scale(1.05);
+  }
+  
+  footer button:active {
+    transform: scale(0.95);
+  }
+
+  .habit-box .habit-buttons button:hover {
+    color: #3498db;
+    transform: scale(1.5); /* Adjust the scale factor as needed */
+    transition: transform 0.3s;
+  }
+  
+  /* Hover effect for completed habit boxes */
+  .habit-box.done:hover {
+    background-color: #92c492; /* Change to your desired color */
+    border-color: #65a765; /* Change to your desired color */
+  }
+  
+  /* Hover effect for not completed habit boxes */
+  .habit-box:not(.done):hover {
+    background-color: #dddddd; /* Change to your desired color */
+    border-color: #999; /* Change to your desired color */
+  }
+  
+  .habit-box span {
+    transform: scale(1); /* Default size */
+    transition: transform 0.3s;
+  }
+  
+  /* Increase text size on hover */
+  .habit-box:hover span {
+    transform: scale(1.2); /* Adjust the scale factor as needed */
+    transition: transform 0.3s;
   }
 }
