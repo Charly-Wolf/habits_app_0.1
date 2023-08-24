@@ -227,6 +227,7 @@ async function deleteHabit(habit) {
       } else {
         const errorData = await response.json(); // Assuming the server sends a JSON error response
         console.error("Delete failed:", errorData.message);
+        alert(errorData.message);
       }
     }
     // exitDeleteMode();
@@ -301,62 +302,6 @@ function exitEditMode() {
   // const habitTitle = document.querySelector(".habit-subtitle");
   // habitTitle.textContent = "Your Habits";
 }
-
-// async function trackHabit(habitId) {
-//   if (editingMode) {
-//     // Handle editing logic here
-//     const habitToEdit = await fetchHabitById(habitId); // Fetch the habit data
-
-//     if (habitToEdit) {
-//       const newHabitName = prompt("Enter new habit name:", habitToEdit.name); // Populate the prompt with the current habit name
-//       if (newHabitName !== null) {
-//         await updateHabitName(habitId, newHabitName);
-//         // Refresh the habit list after editing
-//         fetchHabits();
-//       }
-//       exitEditMode();
-//     }
-//   } else if (deletingMode) {
-//     // if (deletingMode) {
-//     const confirmed = confirm("Are you sure you want to delete this habit?");
-//     if (confirmed) {
-//       // alert("DELETED");
-//       deleteHabit(habitId); // Call the deleteHabit function
-//     }
-//     exitDeleteMode();
-//   } else {
-//     // Original trackHabit logic for tracking status
-//     const habitBox = document.querySelector(
-//       `.habit-box[data-habit-id="${habitId}"]`
-//     );
-//     if (habitBox) {
-//       if (!habitBox.classList.contains("done")) {
-//         const response = await fetch(`/habit/mark_done/${habitId}`, {
-//           method: "POST",
-//         });
-//         if (response.ok) {
-//           habitBox.classList.add("done"); // Add the "done" class
-//           // const checkButton = document.getElementById(`check-btn-id-${habitId}`);
-//         } else {
-//           // TODO: Handle track habit error
-//         }
-//       } else {
-//         const confirmed = confirm("Unmark this habit?");
-//         if (confirmed) {
-//           const response = await fetch(`/habit/mark_undone/${habitId}`, {
-//             method: "PUT",
-//           });
-//           if (response.ok) {
-//             habitBox.classList.remove("done");
-//           } else {
-//             // TODO: Handle track habit error
-//           }
-//         }
-//       }
-//     }
-//   }
-//   await fetchHabits();
-// }
 
 // Function to fetch habit by ID
 async function fetchHabitById(habitId) {

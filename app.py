@@ -167,6 +167,8 @@ def delete_habit(habit_id):
     habit = Habit.query.get_or_404(habit_id)
     
     try:
+        if (len(filter_logs_by_habit_id(habit_id)) > 0):
+            return jsonify({'message': 'There are log entries for this habit, please wait for Version 2.0. to be able to archive habits instead of delete them 😉'}), 400
         db.session.delete(habit)
         db.session.commit()
         return jsonify({'message': 'Habit deleted successfully'}), 200
