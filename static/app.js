@@ -117,25 +117,28 @@ async function fetchHabits() {
       habits.forEach((habit) => {
         const habitItem = document.createElement("li");
         habitItem.className = "habit-box"; // Always assign the base class
-        if (habit.status) {
-          habitItem.classList.add("done"); // Add "done" class if status is true
-        }
-
+        
         // Set the data-habit-id attribute
         habitItem.setAttribute("data-habit-id", habit.habit_id);
 
         habitItem.innerHTML = `
           <span class="habit-name">${habit.name}</span>
-          <div class="habit-buttons">
-            <button class="delete-btn">
-                <i class="fa-solid fa-trash-can"></i>
-            </button>
-            <button class="edit-btn">
+          <div class="habit-buttons" id="buttons-id-${habit.habit_id}">
+            <button class="mark-done-btn" id="check-btn-id-${habit.habit_id}">
+              <i class="fa-solid fa-square-check"></i>
+            </button> 
+            <button class="unmark-done-btn" id="uncheck-btn-id-${habit.habit_id}">
+              <i class="fa-regular fa-square"></i>
+            </button> 
+            <button class="edit-btn" id="edit-btn-id-${habit.habit_id}">
                 <i class="fas fa-pencil"></i>
+            </button>
+            <button class="delete-btn" id="delete-btn-id-${habit.habit_id}">
+                <i class="fa-solid fa-trash-can"></i>
             </button>
           </div>
         `;
-
+        
         habitItem.addEventListener("click", () => {
           // if (!habitItem.classList.contains("done")) {
           trackHabit(habit.habit_id);
@@ -143,6 +146,23 @@ async function fetchHabits() {
         });
 
         habitList.appendChild(habitItem);
+
+        const checkButton = document.getElementById(`check-btn-id-${habit.habit_id}`);
+        const uncheckButton = document.getElementById(`uncheck-btn-id-${habit.habit_id}`);
+        const deleteButton = document.getElementById(`delete-btn-id-${habit.habit_id}`);
+        const editButton = document.getElementById(`edit-btn-id-${habit.habit_id}`);
+        if (habit.status) {        
+          habitItem.classList.add("done"); // Add "done" class if status is true 
+          checkButton.style.display = "none";
+          uncheckButton.style.display = "flex";
+          deleteButton.style.display = "none";
+          editButton.style.display = "none";
+        }else {
+          checkButton.style.display = "flex";
+          uncheckButton.style.display = "none";
+          deleteButton.style.display = "flex";
+          editButton.style.display = "flex";
+        }
       });
     } else {
       // Handle fetch habits error
@@ -273,6 +293,7 @@ async function trackHabit(habitId) {
         });
         if (response.ok) {
           habitBox.classList.add("done"); // Add the "done" class
+          // const checkButton = document.getElementById(`check-btn-id-${habitId}`);
         } else {
           // TODO: Handle track habit error
         }

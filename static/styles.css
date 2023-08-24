@@ -271,6 +271,9 @@ button:active {
   content: "DELETE"; /* Replace with the desired text */
 }
 
+/* .unmark-done-btn {
+  display: none !important;
+} */
 /* Other styles */
 .error-message {
   color: red;
