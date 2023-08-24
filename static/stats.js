@@ -12,6 +12,7 @@ async function fetchHabits() {
 
     if (response.ok) {
       const habits = await response.json();
+      habits.sort((a, b) => a.name.localeCompare(b.name)); // Sort habits by name
 
       habits.forEach((habit) => {
         habit.logs.forEach((log) => {

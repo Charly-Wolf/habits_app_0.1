@@ -115,5 +115,5 @@ footer button:active {
 /* Adjust the width of the first column */
 .habit-table th:first-child,
 .habit-table td:first-child {
-  min-width: 150px;
+  min-width: 70px;
 }

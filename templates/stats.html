@@ -16,7 +16,7 @@
           <table class="habit-table">
             <thead>
               <tr>
-                <th>Days/Habits</th>
+                <th>Date</th>
                 {% for habit in habits %}
                 <th>{{ habit.name }}</th>
                 {% endfor %}
@@ -25,7 +25,7 @@
             <tbody>
               {% for day in days %}
               <tr>
-                <td>{{ day.strftime('%Y-%m-%d') }}</td>
+                <td>{{ day.strftime('%d-%m-%y') }}</td>
                 {% for habit in habits %}
                 <td
                   id="{{ habit.habit_id }}_{{ day.strftime('%Y-%m-%d') }}"
