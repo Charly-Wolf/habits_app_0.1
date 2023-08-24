@@ -13,7 +13,7 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = "P@ssW0rd#" # WHAT DO I NEED THIS FOR??
 
 #LOCAL DB (FOR TESTING):
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
+#app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
 
 #RENDER ONLINE DB (FOR TESTING):
 #app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://test_db_7vup_user:vN2FuqTTQv3Eng3LmcnYBW4ii6PkuxYE@dpg-cjb50c3bq8nc73bmg13g-a.oregon-postgres.render.com/test_db_7vup'
@@ -168,7 +168,7 @@ def delete_habit(habit_id):
     
     try:
         if (len(filter_logs_by_habit_id(habit_id)) > 0):
-            return jsonify({'message': 'There are log entries for this habit, please wait for Version 0.2. to be able to archive habits instead of delete them 😉'}), 400
+            return jsonify({'message': 'There are log entries for this habit, please wait for Version 0.2. to be able to archive habits instead of deleting them 😉'}), 400
         db.session.delete(habit)
         db.session.commit()
         return jsonify({'message': 'Habit deleted successfully'}), 200
