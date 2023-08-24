@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Habits Builder</title>
+    <link rel="stylesheet" type="text/css" href="/static/stats.css" />
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1>Habits Builder</h1>
+      </header>
+      <main>
+        <div class="table-container">
+          <table class="habit-table">
+            <thead>
+              <tr>
+                <th>Days/Habits</th>
+                {% for habit in habits %}
+                <th>{{ habit.name }}</th>
+                {% endfor %}
+              </tr>
+            </thead>
+            <tbody>
+              {% for day in days %}
+              <tr>
+                <td>{{ day.strftime('%Y-%m-%d') }}</td>
+                {% for habit in habits %}
+                <td
+                  id="{{ habit.habit_id }}_{{ day.strftime('%Y-%m-%d') }}"
+                ></td>
+                {% endfor %}
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </main>
+    </div>
+    <footer>
+      <button id="back-to-habits">Habits</button>
+      <!-- <button id="add-button">Add Habit</button> -->
+      <button id="logout">Logout</button>
+    </footer>
+    <script src="/static/stats.js"></script>
+  </body>
+</html>

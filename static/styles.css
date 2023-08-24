@@ -253,6 +253,10 @@ button {
   background-color: red;
 }
 
+#stats {
+  display: none;
+}
+
 /* For screens with a maximum width of 600px */
 @media (max-width: 600px) {
   .container {

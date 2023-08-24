@@ -1,8 +1,13 @@
 // Entry point for the app
 const appContainer = document.getElementById("app");
 
+const statsButton = document.getElementById("stats");
 const addHabitButton = document.getElementById("add-button");
 const backToHabitsListButton = document.getElementById("back-to-habits");
+
+statsButton.addEventListener("click", () => {
+  window.location.href = "/stats";
+});
 
 addHabitButton.addEventListener("click", () => {
   backToHabitsListButton.style.display = "flex";
@@ -56,6 +61,10 @@ async function fetchHabits() {
       });
       addHabitButton2.style.display = habits.length === 0 ? "flex" : "none";
       addHabitButton.style.display = habits.length === 0 ? "none" : "flex";
+
+      if (habits.length > 0) {
+        statsButton.style.display = "flex";
+      }
 
       habits.forEach((habit) => {
         const habitItem = document.createElement("li");
@@ -112,8 +121,8 @@ async function fetchHabits() {
           editButton.style.display = "none";
 
           habitName.addEventListener("click", async () =>
-          unmarkHabitDone(habit)
-        );
+            unmarkHabitDone(habit)
+          );
           uncheckButton.addEventListener("click", async () =>
             unmarkHabitDone(habit)
           );
@@ -124,9 +133,7 @@ async function fetchHabits() {
           deleteButton.style.display = "flex";
           editButton.style.display = "flex";
 
-          habitName.addEventListener("click", async () =>
-          markHabitDone(habit)
-        );
+          habitName.addEventListener("click", async () => markHabitDone(habit));
           checkButton.addEventListener("click", async () =>
             markHabitDone(habit)
           );

@@ -37,7 +37,9 @@ class Habit(db.Model):
     name = db.Column(db.String(100), nullable=False)
     status = db.Column(db.Boolean, default=False)
     #created_at = db.Column(db.DateTime, default=datetime.utcnow) 
-    logs = db.relationship('HabitLog', backref='habit', lazy=True)
+    @property
+    def logs(self):
+        return HabitLog.query.filter_by(habit_id=self.habit_id).all()
 
 
 class HabitLog(db.Model):
@@ -139,9 +141,16 @@ def get_current_user_habits_in_a_dictionary(user_id):
         habit_data = {
             "habit_id": habit.habit_id,
             "name": habit.name,
-            "status": habit.status
+            "status": habit.status,
+            "logs": [{"log_id": log.log_id, "log_date": log.log_date} for log in habit.logs]
         }
         habit_list.append(habit_data)
+
+    print("\n\n")
+    for habit in habits:
+        print(f"Habit: {habit.name}")
+        for log in habit.logs:
+            print(str(log.log_date.date()))
 
     return habit_list
 
@@ -324,6 +333,44 @@ def update_habit_name(habit_id):
         return jsonify({'message': 'Habit name updated successfully'}), 200
     except Exception as e:
         return jsonify({'message': 'An error occurred while updating the habit name.'}), 500
+
+#####################################################
+
+
+@app.route('/stats', methods=['GET'])
+def stats():
+    user_id = request.cookies.get('user_id')
+    if user_id is None:
+        return redirect(url_for('login'))
+
+    habits = get_current_user_habits_in_a_dictionary(user_id)
+    log_entries = HabitLog.query.all()
+
+    data = []
+
+    for habit in habits:
+        habit_data = {
+            "habit_id": habit["habit_id"],
+            "name": habit["name"],
+            "logs": [],
+        }
+        for log_entry in log_entries:
+            if log_entry.habit_id == habit["habit_id"]:
+                habit_data["logs"].append({
+                    "log_date": log_entry.log_date.date(),
+                    "status": True,
+                })
+        data.append(habit_data)
+
+        log_dates = [entry.log_date.date() for entry in log_entries]
+        start_date = min(log_dates) if log_dates else datetime.today().date()
+        end_date = max(log_dates) if log_dates else datetime.today().date()
+        days = [start_date + timedelta(days=i) for i in range((end_date - start_date).days + 1)]
+
+    return render_template('stats.html', habits=data, days=days)
+
+
+########################################################
 
 
 @app.route('/')
