@@ -253,7 +253,9 @@ button {
   cursor: pointer;
 }
 
-/* Original styles for larger screens */
+#logout {
+  background-color: red;
+}
 
 /* For screens with a maximum width of 600px */
 @media (max-width: 600px) {
@@ -332,9 +334,6 @@ button {
     transform: scale(0.95); /* Slightly scale down on active */
   }
   
-  #logout {
-    background-color: red;
-  }
   
   #logout:hover {
     background-color: rgb(114, 12, 12);
