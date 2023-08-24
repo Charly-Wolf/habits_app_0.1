@@ -171,7 +171,7 @@ main {
 
 /* Modern button styles */
 button {
-  padding: 10px 20px;
+  padding-right: 10px;
   background-color: #007bff;
   color: #fff;
   border: none;
