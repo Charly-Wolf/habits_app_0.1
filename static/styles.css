@@ -150,8 +150,6 @@ main {
   transition: transform 0.3s;
 }
 
-
-
 /* Style for completed habit boxes */
 .habit-box.done {
   background-color: #d1f9e3;
@@ -181,8 +179,6 @@ button {
   cursor: pointer;
   transition: background-color 0.3s, transform 0.2s;
 }
-
-
 
 /* .habit-box.delete-modus:hover {
   background-color: #b43555;
@@ -310,6 +306,11 @@ button {
     flex-direction: column;
     align-items: center;
     padding: 20px;
+
+    background-image: url("/static/Blue_Landscape2.jpg");
+    background-size: cover; /* Adjust as needed */
+    background-repeat: no-repeat;
+    background-attachment: fixed;
   }
 
   .habit-box {
@@ -323,18 +324,24 @@ button {
 }
 
 /* Only for big screens */
-@media (min-width: 600px) { 
+@media (min-width: 600px) {
+  body {
+    background-image: url("/static/Blue_Landscape2.jpg");
+    background-size: cover; /* Adjust as needed */
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    
+  }
 
   button:hover {
     background-color: #0056b3;
     transform: scale(1.05); /* Slightly scale up on hover */
   }
-  
+
   button:active {
     transform: scale(0.95); /* Slightly scale down on active */
   }
-  
-  
+
   #logout:hover {
     background-color: rgb(114, 12, 12);
   }
@@ -343,7 +350,7 @@ button {
     background-color: #0056b3;
     transform: scale(1.05);
   }
-  
+
   footer button:active {
     transform: scale(0.95);
   }
@@ -353,24 +360,24 @@ button {
     transform: scale(1.5); /* Adjust the scale factor as needed */
     transition: transform 0.3s;
   }
-  
+
   /* Hover effect for completed habit boxes */
   .habit-box.done:hover {
     background-color: #92c492; /* Change to your desired color */
     border-color: #65a765; /* Change to your desired color */
   }
-  
+
   /* Hover effect for not completed habit boxes */
   .habit-box:not(.done):hover {
     background-color: #dddddd; /* Change to your desired color */
     border-color: #999; /* Change to your desired color */
   }
-  
+
   .habit-box span {
     transform: scale(1); /* Default size */
     transition: transform 0.3s;
   }
-  
+
   /* Increase text size on hover */
   .habit-box:hover span {
     transform: scale(1.2); /* Adjust the scale factor as needed */
