@@ -65,13 +65,13 @@ async function fetchHabits() {
         habitItem.setAttribute("data-habit-id", habit.habit_id);
 
         habitItem.innerHTML = `
-          <span class="habit-name">${habit.name}</span>
+          <span class="habit-name" id="habit-name-${habit.name}">${habit.name}</span>
           <div class="habit-buttons" id="buttons-id-${habit.habit_id}">
             <button class="mark-done-btn" id="check-btn-id-${habit.habit_id}">
-              <i class="fa-solid fa-square-check"></i>
+              <i class="fa-regular fa-square"></i>
             </button> 
             <button class="unmark-done-btn" id="uncheck-btn-id-${habit.habit_id}">
-              <i class="fa-regular fa-square"></i>
+              <i class="fa-solid fa-square-check"></i>
             </button> 
             <button class="edit-btn" id="edit-btn-id-${habit.habit_id}">
                 <i class="fas fa-pencil"></i>
@@ -89,6 +89,8 @@ async function fetchHabits() {
         });
 
         habitList.appendChild(habitItem);
+
+        const habitName = document.getElementById(`habit-name-${habit.name}`);
 
         const checkButton = document.getElementById(
           `check-btn-id-${habit.habit_id}`
@@ -109,6 +111,9 @@ async function fetchHabits() {
           deleteButton.style.display = "none";
           editButton.style.display = "none";
 
+          habitName.addEventListener("click", async () =>
+          unmarkHabitDone(habit)
+        );
           uncheckButton.addEventListener("click", async () =>
             unmarkHabitDone(habit)
           );
@@ -119,6 +124,9 @@ async function fetchHabits() {
           deleteButton.style.display = "flex";
           editButton.style.display = "flex";
 
+          habitName.addEventListener("click", async () =>
+          markHabitDone(habit)
+        );
           checkButton.addEventListener("click", async () =>
             markHabitDone(habit)
           );

@@ -235,7 +235,7 @@ button:active {
   background-color: rgb(114, 12, 12);
 }
 
-.habit-box.delete-modus:hover {
+/* .habit-box.delete-modus:hover {
   background-color: #b43555;
 }
 .habit-box.delete-modus {
@@ -250,21 +250,21 @@ button:active {
 }
 .habit-box.edit-modus {
   background-color: #98dde0;
-}
+} */
 
-.habit-box:hover.edit-modus::before {
+/* .habit-box:hover.edit-modus::before {
   color: #ffffff;
   content: "EDIT NAME"; /* Replace with the desired text */
-}
+/* } */
 
-.habit-box.delete-modus:hover span {
+/* .habit-box.delete-modus:hover span {
   display: none;
-}
+} */
 
-.habit-box:hover.delete-modus::before {
+/* .habit-box:hover.delete-modus::before {
   color: #ffffff;
   content: "DELETE"; /* Replace with the desired text */
-}
+/* }  */
 
 /* .unmark-done-btn {
   display: none !important;
