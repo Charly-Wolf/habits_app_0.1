@@ -178,6 +178,7 @@ button {
   border-radius: 4px;
   cursor: pointer;
   transition: background-color 0.3s, transform 0.2s;
+  padding: 12px 20px; /* Adjust padding for vertical spacing */
 }
 
 /* .habit-box.delete-modus:hover {
@@ -257,6 +258,22 @@ button {
   display: none;
 }
 
+.add-habit-container {
+  padding: 2rem;
+  display: flex;
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
+  flex-direction: column;
+  text-align: center;
+}
+
+#new-habit-name {
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
 /* For screens with a maximum width of 600px */
 @media (max-width: 600px) {
   .container {
@@ -334,7 +351,6 @@ button {
     background-size: cover; /* Adjust as needed */
     background-repeat: no-repeat;
     background-attachment: fixed;
-    
   }
 
   button:hover {

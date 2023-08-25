@@ -248,12 +248,14 @@ async function updateHabitName(habit) {
 
 function renderAddHabitForm() {
   appContainer.innerHTML = `
-        <h2>Add Habit</h2>
-        <form id="add-habit-form">
-            <input type="text" id="new-habit-name" placeholder="Habit Name" required>
-            <button type="submit">Confirm new Habit</button>
-            <div id="error-message" class="error-message"></div>
-        </form>
+        <div class="add-habit-container">
+          <h2>Add Habit</h2>
+          <form id="add-habit-form">
+              <input type="text" id="new-habit-name" placeholder="Habit Name" required>
+              <button type="submit">Confirm new Habit</button>
+              <div id="error-message" class="error-message"></div>
+          </form>
+        </div>
     `;
 
   const addHabitForm = document.getElementById("add-habit-form");
