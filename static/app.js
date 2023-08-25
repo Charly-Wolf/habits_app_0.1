@@ -46,6 +46,7 @@ async function fetchHabits() {
 
     if (response.ok) {
       const habits = await response.json();
+      habits.sort((a, b) => (a.status > b.status ? 1 : b.status > a.status ? -1 : 0));
       const habitList = document.getElementById("habit-list");
       habitList.innerHTML = "";
 

@@ -132,7 +132,6 @@ def get_habits():
 
 def get_current_user_habits_in_a_dictionary(user_id):
     habits = Habit.query.filter_by(user_id=user_id).order_by(
-        Habit.status,
         func.lower(Habit.name) 
         ).all()  # Fetch user's habits ordered by name
     habit_list = []
